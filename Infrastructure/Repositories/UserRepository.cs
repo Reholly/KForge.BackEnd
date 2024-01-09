@@ -14,7 +14,7 @@ public class UserRepository(ApplicationDbContext context)
     {
         await _context.AddAsync(user, ct);
     }
-    public async Task<ApplicationUser> GetByEmailAsync(string username, CancellationToken ct = default)
+    public async Task<ApplicationUser> GetByUsernameAsync(string username, CancellationToken ct = default)
     {
         var user = await _context.Profiles.FirstOrDefaultAsync(x => x.Username == username, ct);
 
@@ -24,12 +24,12 @@ public class UserRepository(ApplicationDbContext context)
         return user;
     }
 
-    public Task UpdateUser(ApplicationUser user, CancellationToken ct = default)
+    public async Task UpdateUserAsync(ApplicationUser user, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        await Task.Run(() =>_context.Profiles.Update(user), ct);
     }
 
-    public Task DeleteUser(ApplicationUser user, CancellationToken ct = default)
+    public Task DeleteUserAsync(ApplicationUser user, CancellationToken ct = default)
     {
         throw new NotImplementedException();
     }
@@ -39,8 +39,8 @@ public class UserRepository(ApplicationDbContext context)
         throw new NotImplementedException();
     }
 
-    public Task CommitAsync()
+    public Task CommitAsync(CancellationToken ct = default)
     {
-        return _context.SaveChangesAsync();
+        return _context.SaveChangesAsync(ct);
     }
 }

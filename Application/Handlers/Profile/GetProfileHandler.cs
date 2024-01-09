@@ -1,4 +1,3 @@
-using Application.Exceptions.Auth;
 using Application.Requests.Profile;
 using Application.Requests.Wrappers;
 using Application.Responses.Profile;
@@ -22,17 +21,17 @@ public class GetProfileHandler(
     {
         var claims = _jwtTokenService.ParseClaims(request.JwtToken);
 
-        if (!_permissionService.IsProfileOwner(request.Request.Username, claims))
-            throw new PermissionDeniedException("Not profile owner.");
+        bool isOwner = _permissionService.IsProfileOwner(request.Request.Username, claims);
         
-        var user = await _userRepository.GetByEmailAsync(request.Request.Username, ct);
+        var user = await _userRepository.GetByUsernameAsync(request.Request.Username, ct);
 
         return new GetProfileResponse
         (
             user.Username,
             user.Name,
             user.Surname,
-            user.Patronymic
+            user.Patronymic,
+            isOwner
         );
     }
 }

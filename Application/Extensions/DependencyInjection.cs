@@ -23,7 +23,9 @@ public static class DependencyInjection
         collection.AddScoped<LoginHandler>();
         collection.AddScoped<RegisterHandler>();
         collection.AddScoped<RefreshTokenHandler>();
+        
         collection.AddScoped<GetProfileHandler>();
+        collection.AddScoped<UpdateProfileHandler>();
     }
 
     public static void AddValidators(this IServiceCollection collection)

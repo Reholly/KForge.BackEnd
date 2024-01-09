@@ -1,3 +1,4 @@
+using Application.Models;
 using Application.Requests.Auth;
 using FluentValidation;
 
@@ -19,13 +20,13 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
             .MinimumLength(5)   
             .MaximumLength(100);
         
-        RuleFor(x => x.Name)
+        RuleFor(x => x.ApplicationUserModel.Name)
             .NotEmpty()
             .NotNull()
             .MinimumLength(2)   
             .MaximumLength(30);
         
-        RuleFor(x => x.Surname)
+        RuleFor(x => x.ApplicationUserModel.Surname)
             .NotEmpty()
             .NotNull()
             .MinimumLength(2)   
@@ -37,7 +38,7 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
             .MinimumLength(2)   
             .MaximumLength(30);
         
-        RuleFor(x => x.Patronymic)
+        RuleFor(x => x.ApplicationUserModel.Patronymic)
             .NotNull()
             .MaximumLength(30);
     }

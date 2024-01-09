@@ -1,7 +1,9 @@
 using Application.Handlers.Profile;
+using Application.Models;
 using Application.Requests.Profile;
 using Application.Requests.Wrappers;
 using Application.Responses.Profile;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +24,15 @@ public class UserProfileController : ControllerBase
                 new GetProfileRequest(username)),
             ct);
     
-    //ChangeData()
-    //
+    [HttpPost("{username}")]
+    [Authorize(Roles = "Student")]
+    public Task<UpdateProfileResponse> UpdateProfile(
+        [FromBody] ApplicationUserModel updateUserDto,
+        [FromRoute] string username,
+        [FromServices] UpdateProfileHandler handler,
+        CancellationToken ct = default)
+        => handler.HandleAsync(new AuthorizationWrapperRequest<UpdateProfileRequest>(
+                HttpContext.Request.Headers.Authorization!, 
+                new UpdateProfileRequest(username, updateUserDto)),
+            ct);
 }

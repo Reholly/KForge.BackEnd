@@ -18,11 +18,11 @@ public class RegisterHandler(IAuthService authService, IValidator<RegisterReques
         await _authService.RegisterAsync(request.Username, request.Email, request.Password, 
             new ApplicationUser
             {
-                BirthDate = request.BirthDate,
-                Name = request.Name,
+                BirthDate = request.ApplicationUserModel.BirthDate,
+                Name = request.ApplicationUserModel.Name,
                 Username = request.Username,
-                Surname = request.Surname,
-                Patronymic = request.Patronymic,
+                Surname = request.ApplicationUserModel.Surname,
+                Patronymic = request.ApplicationUserModel.Patronymic,
             });
 
         return new RegisterResponse();
