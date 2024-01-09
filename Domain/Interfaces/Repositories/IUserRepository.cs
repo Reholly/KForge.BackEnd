@@ -4,9 +4,10 @@ namespace Domain.Interfaces.Repositories;
 
 public interface IUserRepository
 {
-    Task<ApplicationUser> GetUserByEmailAsync(string email);
-    Task<IEnumerable<ApplicationUser>> GetAllUsers();
-    Task<ApplicationUser> UpdateUser(ApplicationUser user);
-    Task<ApplicationUser> DeleteUser(ApplicationUser user);
-    Task<ApplicationUser> DeleteUserByEmailAsync(string email);
+    Task CreateAsync(ApplicationUser user, CancellationToken ct = default);
+    Task<ApplicationUser> GetByEmailAsync(string username,CancellationToken ct = default);
+    Task UpdateUser(ApplicationUser user, CancellationToken ct = default);
+    Task DeleteUser(ApplicationUser user, CancellationToken ct = default);
+    Task DeleteUserByEmailAsync(string email, CancellationToken ct = default);
+    Task CommitAsync();
 }

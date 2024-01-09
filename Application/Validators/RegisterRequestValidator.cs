@@ -30,6 +30,12 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
             .NotNull()
             .MinimumLength(2)   
             .MaximumLength(30);
+                
+        RuleFor(x => x.Username)
+            .NotEmpty()
+            .NotNull()
+            .MinimumLength(2)   
+            .MaximumLength(30);
         
         RuleFor(x => x.Patronymic)
             .NotNull()

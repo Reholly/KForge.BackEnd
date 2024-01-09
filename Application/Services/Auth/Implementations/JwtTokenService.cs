@@ -21,9 +21,9 @@ public class JwtTokenService : IJwtTokenService
         return GenerateJwtToken(expiresInSeconds, claims);
     }
 
-    public string GenerateRefreshToken(int expiresInSeconds, string email)
+    public string GenerateRefreshToken(int expiresInSeconds, string username)
     {
-        return GenerateJwtToken(expiresInSeconds, [new Claim(ClaimTypes.Email, email)]);
+        return GenerateJwtToken(expiresInSeconds, [new Claim(ClaimTypes.UserData, username)]);
     }
 
     public async Task<bool> IsJwtTokenValidAsync(string jwtToken, bool validateLifeTime)

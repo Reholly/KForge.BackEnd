@@ -1,9 +1,10 @@
 using Application.Requests.Auth;
 using Application.Responses.Auth;
 using Application.Services.Auth.Interfaces;
+using Domain.Entities;
 using FluentValidation;
 
-namespace Application.Handlers;
+namespace Application.Handlers.Auth;
 
 public class RegisterHandler(IAuthService authService, IValidator<RegisterRequest> validator)
 {
@@ -14,7 +15,15 @@ public class RegisterHandler(IAuthService authService, IValidator<RegisterReques
     {
         await _validator.ValidateAndThrowAsync(request, ct);
         
-        await _authService.RegisterAsync(request.Email, request.Password);
+        await _authService.RegisterAsync(request.Username, request.Email, request.Password, 
+            new ApplicationUser
+            {
+                BirthDate = request.BirthDate,
+                Name = request.Name,
+                Username = request.Username,
+                Surname = request.Surname,
+                Patronymic = request.Patronymic,
+            });
 
         return new RegisterResponse();
     }

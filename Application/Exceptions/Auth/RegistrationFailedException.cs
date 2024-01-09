@@ -1,3 +1,3 @@
 namespace Application.Exceptions.Auth;
 
-public class RegistrationFailedException (string message, int errorCode) : ApplicationLayerException(message, errorCode);
+public class RegistrationFailedException (string message) : ApplicationLayerException(message, 400);

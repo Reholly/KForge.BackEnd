@@ -1,3 +1,3 @@
 namespace Application.Exceptions.Auth;
 
-public class LoginFailedException(string message, int errorCode) : ApplicationLayerException(message, errorCode);
+public class LoginFailedException(string message) : ApplicationLayerException(message, 401);

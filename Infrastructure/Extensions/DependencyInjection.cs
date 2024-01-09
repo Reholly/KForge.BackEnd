@@ -1,4 +1,6 @@
+using Domain.Interfaces.Repositories;
 using Infrastructure.Contexts;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,5 +13,10 @@ public static class DependencyInjection
     {
         collection.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+    }
+
+    public static void AddRepositories(this IServiceCollection collection)
+    {
+        collection.AddScoped<IUserRepository, UserRepository>();
     }
 }

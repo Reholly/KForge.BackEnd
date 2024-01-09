@@ -4,7 +4,7 @@ using Application.Services.Auth.Interfaces;
 using FluentValidation;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Application.Handlers;
+namespace Application.Handlers.Auth;
 
 public class LoginHandler(
     IAuthService authService,
@@ -19,9 +19,9 @@ public class LoginHandler(
     {
         await _validator.ValidateAndThrowAsync(request, ct);
         
-        var loginModel = await _authService.LoginAsync(request.Email, request.Password);
+        var loginModel = await _authService.LoginAsync(request.Username, request.Password);
         
-        _refreshTokensCache.Set(loginModel.RefreshToken, request.Email, new MemoryCacheEntryOptions()
+        _refreshTokensCache.Set(loginModel.RefreshToken, request.Username, new MemoryCacheEntryOptions()
             .SetAbsoluteExpiration(TimeSpan.FromSeconds(loginModel.RefreshTokenExpiresInSeconds)));
         
         return new LoginResponse

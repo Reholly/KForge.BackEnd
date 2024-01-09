@@ -1,4 +1,4 @@
-using Application.Handlers;
+using Application.Handlers.Auth;
 using Application.Requests.Auth;
 using Application.Responses.Auth;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
-[Route("/auth/api")]
+[Route("/api/auth")]
 public class AuthController : ControllerBase
 {
     [HttpPost("register")]

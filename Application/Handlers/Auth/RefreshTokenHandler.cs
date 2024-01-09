@@ -7,7 +7,7 @@ using Application.Services.Auth.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 
-namespace Application.Handlers;
+namespace Application.Handlers.Auth;
 
 public class RefreshTokenHandler(
     IJwtTokenService tokenService, 
@@ -26,18 +26,18 @@ public class RefreshTokenHandler(
         _refreshTokensCache.TryGetValue(request.RefreshToken, out string? email);
 
         if (email is null)
-            throw new JwtTokenRefreshException("Refresh token is expired or invalid.", 401);
+            throw new JwtTokenRefreshException("Refresh token is expired or invalid.");
 
         bool isValid = await _tokenService.IsJwtTokenValidAsync(request.ExpiredAccessToken, false);
         if (!isValid)
-            throw new JwtTokenRefreshException("Expired access token is invalid by Key. ", 401);
+            throw new JwtTokenRefreshException("Expired access token is invalid by Key. ");
         
         var refreshTokenClaims = _tokenService.ParseClaims(request.RefreshToken);
         
         var refreshTokenEmail = refreshTokenClaims.First(x => x.Type == ClaimTypes.Email).Value.ToString();
 
         if (refreshTokenEmail != email)
-            throw new JwtTokenRefreshException("Refresh token is invalid. No matches access with refresh tokens.", 401);
+            throw new JwtTokenRefreshException("Refresh token is invalid. No matches access with refresh tokens.");
 
         var newRefreshToken = _tokenService.GenerateRefreshToken(refreshTokenExpiresInSecond, refreshTokenEmail);
         var newAccessToken = _tokenService.GenerateAccessToken(accessTokenExpiresInSeconds, _tokenService.ParseClaims(request.ExpiredAccessToken));

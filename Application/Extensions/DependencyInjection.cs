@@ -1,4 +1,5 @@
-using Application.Handlers;
+using Application.Handlers.Auth;
+using Application.Handlers.Profile;
 using Application.Requests.Auth;
 using Application.Services.Auth.Implementations;
 using Application.Services.Auth.Interfaces;
@@ -14,6 +15,7 @@ public static class DependencyInjection
     {
         collection.AddScoped<IJwtTokenService, JwtTokenService>();
         collection.AddScoped<IAuthService, AuthService>();
+        collection.AddScoped<IPermissionService, PermissionService>();
     }
 
     public static void AddHandlers(this IServiceCollection collection)
@@ -21,6 +23,7 @@ public static class DependencyInjection
         collection.AddScoped<LoginHandler>();
         collection.AddScoped<RegisterHandler>();
         collection.AddScoped<RefreshTokenHandler>();
+        collection.AddScoped<GetProfileHandler>();
     }
 
     public static void AddValidators(this IServiceCollection collection)
