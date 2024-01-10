@@ -24,7 +24,6 @@ public class AuthService : IAuthService
         UserManager<IdentityUser> userManager, 
         IJwtTokenService tokenService,
         IConfiguration configuration, 
-        RoleManager<IdentityRole> roleManager, 
         IUserRepository userRepository)
     {
         _signInManager = signInManager;
@@ -56,18 +55,16 @@ public class AuthService : IAuthService
         claims.Add(new Claim(ClaimTypes.UserData, username));
 
         var accessTokenExpiresInSeconds = int.Parse(_configuration["Jwt:AccessTokenExpiresInSeconds"]!);
-        var refreshTokenExpiresInSecond = int.Parse(_configuration["Jwt:RefreshTokenExpiresInSeconds"]!);
+        var refreshTokenExpiresInSeconds = int.Parse(_configuration["Jwt:RefreshTokenExpiresInSeconds"]!);
         
         var accessToken = _tokenService.GenerateAccessToken(accessTokenExpiresInSeconds, claims.ToArray());
-        var refreshToken = _tokenService.GenerateRefreshToken(refreshTokenExpiresInSecond, username);
+        var refreshToken = _tokenService.GenerateRefreshToken(refreshTokenExpiresInSeconds, username);
 
-        return new AuthTokensModel
-        {
-            AccessToken = accessToken, 
-            AccessTokenExpiresInSeconds = accessTokenExpiresInSeconds, 
-            RefreshTokenExpiresInSeconds = refreshTokenExpiresInSecond,
-            RefreshToken = refreshToken
-        };
+        return new AuthTokensModel(
+            refreshToken, 
+            accessToken, 
+            accessTokenExpiresInSeconds, 
+            refreshTokenExpiresInSeconds); 
     }
 
     public async Task RegisterAsync(string username, string email, string password, ApplicationUser applicationUser, string role = "Student")

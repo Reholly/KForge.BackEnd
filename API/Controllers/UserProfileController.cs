@@ -3,36 +3,35 @@ using Application.Models;
 using Application.Requests.Profile;
 using Application.Requests.Wrappers;
 using Application.Responses.Profile;
-using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("/api/profile")]
 public class UserProfileController : ControllerBase
 {
     [HttpGet("{username}")]
-    [Authorize(Roles = "Student")]
     public Task<GetProfileResponse> GetProfile(
-        string username,
         [FromServices] GetProfileHandler handler,
         CancellationToken ct = default)
-        => handler.HandleAsync(new AuthorizationWrapperRequest<GetProfileRequest>(
+        => handler.HandleAsync(
+            new AuthorizationWrapperRequest<GetProfileRequest>(
                 HttpContext.Request.Headers.Authorization!, 
-                new GetProfileRequest(username)),
+                new GetProfileRequest()), 
+            new RequestParametersModel(HttpContext.Request.RouteValues),
             ct);
     
     [HttpPost("{username}")]
-    [Authorize(Roles = "Student")]
     public Task<UpdateProfileResponse> UpdateProfile(
-        [FromBody] ApplicationUserModel updateUserDto,
-        [FromRoute] string username,
+        [FromBody] UpdateProfileRequest request,
         [FromServices] UpdateProfileHandler handler,
         CancellationToken ct = default)
         => handler.HandleAsync(new AuthorizationWrapperRequest<UpdateProfileRequest>(
                 HttpContext.Request.Headers.Authorization!, 
-                new UpdateProfileRequest(username, updateUserDto)),
+                request),
+            new RequestParametersModel(HttpContext.Request.RouteValues),
             ct);
 }

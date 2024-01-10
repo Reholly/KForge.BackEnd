@@ -1,8 +1,5 @@
+using Application.Models;
+
 namespace Application.Responses.Profile;
 
-public record GetProfileResponse(
-    string Name,
-    string Surname, 
-    string Patronymic, 
-    string Username, 
-    bool IsOwner);
+public record GetProfileResponse(ApplicationUserModel UserModel, bool IsOwner);
