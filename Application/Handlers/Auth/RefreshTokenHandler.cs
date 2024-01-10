@@ -44,16 +44,16 @@ public class RefreshTokenHandler(
 
         _refreshTokensCache.Set(newRefreshToken, refreshTokenEmail);
         _refreshTokensCache.Remove(request.RefreshToken);
-
+        
+        var authTokens = new AuthTokensModel(
+            newRefreshToken,
+            newAccessToken,
+            accessTokenExpiresInSeconds,
+            refreshTokenExpiresInSecond);
+        
         return new RefreshTokenResponse
         {
-            AuthTokensModel = new AuthTokensModel
-            {
-                AccessToken = newAccessToken,
-                AccessTokenExpiresInSeconds = accessTokenExpiresInSeconds,
-                RefreshToken = newRefreshToken,
-                RefreshTokenExpiresInSeconds = refreshTokenExpiresInSecond
-            }
+            AuthTokensModel = authTokens
         };
     }
 }
