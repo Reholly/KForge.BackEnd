@@ -11,7 +11,7 @@ namespace API.Controllers;
 public class AuthController : ControllerBase
 {
     [HttpPost("register")]
-    public Task<RegisterResponse> Register(
+    public Task Register(
         [FromBody] RegisterRequest request,
         [FromServices] RegisterHandler handler,
         CancellationToken ct = default)
