@@ -24,18 +24,17 @@ public class GetProfileHandler
     }
 
     public async Task<GetProfileResponse> HandleAsync(
-        AuthorizationWrapperRequest<GetProfileRequest> request,  
-        RequestParametersModel? requestParameters,
+        string username, 
+        string jwtToken,
         CancellationToken ct = default)
     {
-        var claims = _jwtTokenService.ParseClaims(request.JwtToken);
-        var username = requestParameters!.RouteParameters["username"].ToString();
+        var claims = _jwtTokenService.ParseClaims(jwtToken); ;
         
         bool isOwner = _permissionService.IsProfileOwner(username!, claims);
         
         var user = await _userRepository.GetByUsernameAsync(username!, ct);
 
-        var userDto = new ApplicationUserModel(user.Name, user.Surname, user.Patronymic, user.BirthDate);
+        var userDto = new UserModel(user.Name, user.Surname, user.Patronymic, user.BirthDate);
 
         return new GetProfileResponse(userDto, isOwner);
     }

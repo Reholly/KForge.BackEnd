@@ -1,9 +1,12 @@
 using Application.Handlers.Auth;
 using Application.Handlers.Profile;
+using Application.Models;
 using Application.Requests.Auth;
 using Application.Services.Auth.Implementations;
 using Application.Services.Auth.Interfaces;
 using Application.Validators;
+using Application.Validators.Auth;
+using Application.Validators.ModelValidators;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,6 +34,7 @@ public static class DependencyInjection
     public static void AddValidators(this IServiceCollection collection)
     {
         collection.AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
-        collection.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
+        collection.AddScoped<IValidator<IdentityModel>, IdentityModelValidator>();
+        collection.AddScoped<IValidator<UserModel>, UserModelValidator>();
     }
 }

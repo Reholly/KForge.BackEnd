@@ -24,28 +24,26 @@ public class UpdateProfileHandler
         _userRepository = userRepository;
     }
 
-    public async Task<UpdateProfileResponse> HandleAsync(
-        AuthorizationWrapperRequest<UpdateProfileRequest> request, 
-        RequestParametersModel? requestParameters,
+    public async Task HandleAsync(
+        UpdateProfileRequest request, 
+        string usernameFromRoute,
+        string jwtToken,
         CancellationToken ct = default)
     {
-        var claims = _jwtTokenService.ParseClaims(request.JwtToken);
+        var claims = _jwtTokenService.ParseClaims(jwtToken);
 
-        var username = requestParameters!.RouteParameters["username"].ToString();
         
-        if (!_permissionService.IsProfileOwner(username!, claims))
+        if (!_permissionService.IsProfileOwner(usernameFromRoute, claims))
             throw new PermissionDeniedException("Not profile owner.");
         
-        var user = await _userRepository.GetByUsernameAsync(username!, ct);
+        var user = await _userRepository.GetByUsernameAsync(usernameFromRoute, ct);
         
-        user.Name = request.Request.ApplicationUserModel.Name;
-        user.Patronymic = request.Request.ApplicationUserModel.Patronymic;
-        user.Surname = request.Request.ApplicationUserModel.Surname;
-        user.BirthDate = request.Request.ApplicationUserModel.BirthDate;
+        user.Name = request.UserModel.Name;
+        user.Patronymic = request.UserModel.Patronymic;
+        user.Surname = request.UserModel.Surname;
+        user.BirthDate = request.UserModel.BirthDate;
 
         await _userRepository.UpdateUserAsync(user, ct);
         await _userRepository.CommitAsync(ct);
-        
-        return new UpdateProfileResponse();
     }
 }

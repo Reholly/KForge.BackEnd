@@ -1,3 +1,4 @@
+using Application.Models;
 using Application.Requests.Auth;
 using Application.Responses.Auth;
 using Application.Services.Auth.Interfaces;
@@ -6,23 +7,31 @@ using FluentValidation;
 
 namespace Application.Handlers.Auth;
 
-public class RegisterHandler(IAuthService authService, IValidator<RegisterRequest> validator)
+public class RegisterHandler(
+    IAuthService authService, 
+    IValidator<IdentityModel> identityValidator,
+    IValidator<UserModel> userValidator)
 {
     private readonly IAuthService _authService = authService;
-    private readonly IValidator<RegisterRequest> _validator = validator;
+    private readonly IValidator<IdentityModel> _identityValidator = identityValidator;
+    private readonly IValidator<UserModel> _userValidator = userValidator;
 
     public async Task<RegisterResponse> HandleAsync(RegisterRequest request, CancellationToken ct = default)
     {
-        await _validator.ValidateAndThrowAsync(request, ct);
+        await _identityValidator.ValidateAndThrowAsync(request.IdentityModel, ct);
+        await _userValidator.ValidateAndThrowAsync(request.UserModel, ct);
         
-        await _authService.RegisterAsync(request.Username, request.Email, request.Password, 
+        await _authService.RegisterAsync(
+            request.IdentityModel.Username, 
+            request.IdentityModel.Email, 
+            request.IdentityModel.Password, 
             new ApplicationUser
             {
-                BirthDate = request.ApplicationUserModel.BirthDate,
-                Name = request.ApplicationUserModel.Name,
-                Username = request.Username,
-                Surname = request.ApplicationUserModel.Surname,
-                Patronymic = request.ApplicationUserModel.Patronymic,
+                BirthDate = request.UserModel.BirthDate,
+                Name = request.UserModel.Name,
+                Username = request.IdentityModel.Username,
+                Surname = request.UserModel.Surname,
+                Patronymic = request.UserModel.Patronymic,
             });
 
         return new RegisterResponse();

@@ -1,3 +1,4 @@
+using API.Extensions;
 using Application.Handlers.Profile;
 using Application.Models;
 using Application.Requests.Profile;
@@ -15,23 +16,16 @@ public class UserProfileController : ControllerBase
 {
     [HttpGet("{username}")]
     public Task<GetProfileResponse> GetProfile(
+        [FromRoute] string username,
         [FromServices] GetProfileHandler handler,
         CancellationToken ct = default)
-        => handler.HandleAsync(
-            new AuthorizationWrapperRequest<GetProfileRequest>(
-                HttpContext.Request.Headers.Authorization!, 
-                new GetProfileRequest()), 
-            new RequestParametersModel(HttpContext.Request.RouteValues),
-            ct);
+        => handler.HandleAsync(username, HttpContext.GetJwtToken(),ct);
     
     [HttpPost("{username}")]
-    public Task<UpdateProfileResponse> UpdateProfile(
+    public Task UpdateProfile(
+        [FromRoute] string username,
         [FromBody] UpdateProfileRequest request,
         [FromServices] UpdateProfileHandler handler,
         CancellationToken ct = default)
-        => handler.HandleAsync(new AuthorizationWrapperRequest<UpdateProfileRequest>(
-                HttpContext.Request.Headers.Authorization!, 
-                request),
-            new RequestParametersModel(HttpContext.Request.RouteValues),
-            ct);
+        => handler.HandleAsync(request, username, HttpContext.GetJwtToken(), ct);
 }

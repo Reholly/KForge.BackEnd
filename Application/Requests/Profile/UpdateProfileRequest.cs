@@ -2,4 +2,4 @@ using Application.Models;
 
 namespace Application.Requests.Profile;
 
-public record UpdateProfileRequest(ApplicationUserModel ApplicationUserModel);
+public record UpdateProfileRequest(UserModel UserModel);
