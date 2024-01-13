@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Application.Services.Auth.Interfaces;
+using Domain.Entities;
 
 namespace Application.Services.Auth.Implementations;
 
@@ -12,4 +13,8 @@ public class PermissionService : IPermissionService
     {
         throw new NotImplementedException();
     }
+
+    public bool IsInCourse(ApplicationUser user, Course course)
+        => user.CoursesAsMentor.Contains(course)
+           || user.CoursesAsStudent.Contains(course);
 }

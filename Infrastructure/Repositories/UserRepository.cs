@@ -24,6 +24,19 @@ public class UserRepository(ApplicationDbContext context)
         return user;
     }
 
+    public async Task<ApplicationUser> GetByUsernameWithCoursesAsync(string username, CancellationToken ct = default)
+    {
+        var user = await _context.Profiles
+            .Include(au => au.CoursesAsMentor)
+            .Include(au => au.TasksAsAuthor)
+            .FirstOrDefaultAsync(x => x.Username == username, ct);
+
+        if (user is null)
+            throw new InvalidOperationException("No user with such username.");
+
+        return user;
+    }
+
     public async Task UpdateUserAsync(ApplicationUser user, CancellationToken ct = default)
     {
         await Task.Run(() =>_context.Profiles.Update(user), ct);

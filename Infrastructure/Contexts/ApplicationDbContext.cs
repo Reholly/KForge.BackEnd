@@ -7,6 +7,7 @@ namespace Infrastructure.Contexts;
 public sealed class ApplicationDbContext : IdentityDbContext
 {
     public DbSet<ApplicationUser> Profiles => Set<ApplicationUser>();
+    public DbSet<TestTask> TestTasks => Set<TestTask>();
     public ApplicationDbContext() { }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
