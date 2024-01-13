@@ -1,4 +1,4 @@
-namespace Application.Exceptions.Auth;
+namespace Application.Exceptions;
 
 public class ApplicationLayerException(string message, int errorCode) : Exception(message)
 {
