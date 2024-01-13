@@ -1,3 +1,4 @@
+using System.Collections;
 using Domain.Entities.Base;
 
 namespace Domain.Entities;
@@ -13,4 +14,7 @@ public class ApplicationUser : EntityBase
     
     //public ICollection<Course> CoursesAsStudent { get; set; } = new List<Course>();
     //public ICollection<Course> CoursesAsMentor { get; set; } = new List<Course>();
+    
+    public ICollection<TestTaskResult>? TestTaskResults { get; set; }
+    public ICollection<TestTask>? TasksAsAuthor { get; set; }
 }

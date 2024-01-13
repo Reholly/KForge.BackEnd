@@ -1,20 +1,25 @@
-﻿using Application.Exceptions;
-using Application.Requests.Education.Tasks;
-using FluentValidation;
+﻿using System.Security.Claims;
+using Application.Exceptions.Auth;
+using Application.Services.Auth.Interfaces;
+using Domain.Interfaces.Repositories;
 
 namespace Application.Handlers.Edu.Tasks;
 
 public class GetTaskByIdHandler(
-    IValidator<GetTaskByIdRequest> validator)
+    IJwtTokenService jwtTokenService, 
+    IUserRepository userRepository)
 {
-    public async Task HandleAsync(GetTaskByIdRequest request, CancellationToken ct = default)
+    public async Task HandleAsync(Guid taskId, string jwtToken, 
+        CancellationToken ct = default)
     {
-        var validationResult = await validator.ValidateAsync(request, ct);
-        if (!validationResult.IsValid)
+        var tokenClaims = jwtTokenService.ParseClaims(jwtToken);
+        var usernameClaim = tokenClaims.FirstOrDefault(c => c.Type != ClaimTypes.UserData);
+        if (usernameClaim is null)
         {
-            throw new RequestValidationException(validationResult.Errors[0]);
+            throw new PermissionDeniedException("Token doesn't contain username");
         }
-        
-        //var user = await 
+
+        string username = usernameClaim.Value;
+        var user = await userRepository.GetByUsernameAsync(username, ct);
     }
 }

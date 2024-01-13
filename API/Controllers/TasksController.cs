@@ -1,5 +1,5 @@
-﻿using Application.Handlers.Edu.Tasks;
-using Application.Requests.Education.Tasks;
+﻿using API.Extensions;
+using Application.Handlers.Edu.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +10,10 @@ namespace API.Controllers;
 public class TasksController : ControllerBase
 {
     [Authorize(AuthenticationSchemes = "Bearer")]
-    [HttpGet("{task_id}")]
+    [HttpGet("{taskId}")]
     public Task GetTaskById(
-        [FromRoute, FromQuery] GetTaskByIdRequest request,
+        [FromRoute] Guid taskId,
         [FromServices] GetTaskByIdHandler handler,
         CancellationToken ct = default)
-        => handler.HandleAsync(request, ct);
+        => handler.HandleAsync(taskId, HttpContext.GetJwtToken(), ct);
 }

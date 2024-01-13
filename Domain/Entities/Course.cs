@@ -14,4 +14,5 @@ public class Course : EntityBase
     public ICollection<ApplicationUser> Mentors { get; set; } = new List<ApplicationUser>();
 
     public ICollection<Section> Sections { get; set; } = new List<Section>();
+    public ICollection<TestTask>? TestTasks { get; set; }
 }

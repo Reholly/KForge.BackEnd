@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Contexts;
 
-public class ApplicationDbContext : IdentityDbContext
+public sealed class ApplicationDbContext : IdentityDbContext
 {
     public DbSet<ApplicationUser> Profiles => Set<ApplicationUser>();
     public ApplicationDbContext() { }
@@ -12,5 +12,11 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {
         Database.EnsureCreated();
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+        builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
     }
 }

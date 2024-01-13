@@ -3,11 +3,9 @@ using Application.Handlers.Edu.Tasks;
 using Application.Handlers.Profile;
 using Application.Models;
 using Application.Requests.Auth;
-using Application.Requests.Education.Tasks;
 using Application.Services.Auth.Implementations;
 using Application.Services.Auth.Interfaces;
 using Application.Validators.Auth;
-using Application.Validators.Edu.Tasks;
 using Application.Validators.ModelValidators;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +38,5 @@ public static class DependencyInjection
         collection.AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
         collection.AddScoped<IValidator<IdentityModel>, IdentityModelValidator>();
         collection.AddScoped<IValidator<UserModel>, UserModelValidator>();
-        collection.AddScoped<IValidator<GetTaskByIdRequest>, GetTaskByIdRequestValidator>();
     }
 }
