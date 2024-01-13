@@ -1,7 +1,6 @@
 using Application.Handlers.Auth;
 using Application.Handlers.Profile;
 using Application.Models;
-using Application.Requests.Auth;
 using Application.Services.Auth.Implementations;
 using Application.Services.Auth.Interfaces;
 using Application.Services.Utils.Implementations;
@@ -10,6 +9,8 @@ using Application.Validators.Auth;
 using Application.Validators.ModelValidators;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using LoginRequest = Application.Requests.Auth.LoginRequest;
+using ResetPasswordRequest = Application.Requests.Auth.ResetPasswordRequest;
 
 namespace Application.Extensions;
 
@@ -32,6 +33,7 @@ public static class DependencyInjection
         
         collection.AddScoped<GetProfileHandler>();
         collection.AddScoped<UpdateProfileHandler>();
+        collection.AddScoped<ResetPasswordHandler>();
     }
 
     public static void AddValidators(this IServiceCollection collection)
@@ -39,5 +41,6 @@ public static class DependencyInjection
         collection.AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
         collection.AddScoped<IValidator<IdentityModel>, IdentityModelValidator>();
         collection.AddScoped<IValidator<UserModel>, UserModelValidator>();
+        collection.AddScoped<IValidator<ResetPasswordRequest>, ResetPasswordRequestValidator>();
     }
 }

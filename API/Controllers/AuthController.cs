@@ -1,3 +1,4 @@
+using API.Extensions;
 using Application.Handlers.Auth;
 using Application.Requests.Auth;
 using Application.Responses.Auth;
@@ -45,4 +46,11 @@ public class AuthController : ControllerBase
         [FromServices] EmailConfirmHandler handler,
         CancellationToken ct = default)
         => handler.HandleAsync(username, code, ct);
+    
+    [HttpPost("reset")]
+    public Task ResetPassword(
+        [FromBody] ResetPasswordRequest request,
+        [FromServices] ResetPasswordHandler handler,
+        CancellationToken ct = default)
+        => handler.HandleAsync(request, HttpContext.GetJwtToken(), ct);
 }

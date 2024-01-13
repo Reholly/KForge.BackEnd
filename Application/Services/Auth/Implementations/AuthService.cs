@@ -134,4 +134,16 @@ public class AuthService : IAuthService
         if(!result.Succeeded)
             throw new RegistrationFailedException(String.Join(",", result.Errors.Select(x => x.Description)));
     }
+
+    public async Task ResetPasswordAsync(string username, string newPassword)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+
+        if (user is null)
+            throw new PasswordResetException("Could not reset password: user with such username does no exist.");
+        
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        
+        await _userManager.ResetPasswordAsync(user, token, newPassword);
+    }
 }
