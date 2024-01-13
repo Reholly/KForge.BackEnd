@@ -23,7 +23,7 @@ public class GetTaskByIdHandler(
         }
 
         string username = usernameClaim.Value;
-        var user = await userRepository.GetByUsernameAsync(username, ct);
+        var user = await userRepository.GetByUsernameWithCoursesAsync(username, ct);
         NotFoundException.ThrowIfNull(user, nameof(user));
 
         var testTask = await testTaskRepository.GetTaskByIdAsync(taskId, ct);
