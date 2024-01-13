@@ -4,7 +4,8 @@ using Application.Models;
 using Application.Requests.Auth;
 using Application.Services.Auth.Implementations;
 using Application.Services.Auth.Interfaces;
-using Application.Validators;
+using Application.Services.Utils.Implementations;
+using Application.Services.Utils.Interfaces;
 using Application.Validators.Auth;
 using Application.Validators.ModelValidators;
 using FluentValidation;
@@ -19,6 +20,7 @@ public static class DependencyInjection
         collection.AddScoped<IJwtTokenService, JwtTokenService>();
         collection.AddScoped<IAuthService, AuthService>();
         collection.AddScoped<IPermissionService, PermissionService>();
+        collection.AddScoped<IEmailService, EmailService>();
     }
 
     public static void AddHandlers(this IServiceCollection collection)
@@ -26,6 +28,7 @@ public static class DependencyInjection
         collection.AddScoped<LoginHandler>();
         collection.AddScoped<RegisterHandler>();
         collection.AddScoped<RefreshTokenHandler>();
+        collection.AddScoped<EmailConfirmHandler>();
         
         collection.AddScoped<GetProfileHandler>();
         collection.AddScoped<UpdateProfileHandler>();
