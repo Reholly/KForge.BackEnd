@@ -5,7 +5,6 @@ using Application.Handlers.Profile;
 using Application.Mappers;
 using Application.Mappers.Edu;
 using Application.Models;
-using Application.Requests.Auth;
 using Application.Services.Auth.Implementations;
 using Application.Services.Auth.Interfaces;
 using Application.Validators.Auth;
@@ -13,6 +12,8 @@ using Application.Validators.ModelValidators;
 using Domain.Entities;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using LoginRequest = Application.Requests.Auth.LoginRequest;
+using ResetPasswordRequest = Application.Requests.Auth.ResetPasswordRequest;
 
 namespace Application.Extensions;
 
@@ -33,7 +34,7 @@ public static class DependencyInjection
         
         collection.AddScoped<GetProfileHandler>();
         collection.AddScoped<UpdateProfileHandler>();
-
+      
         collection.AddScoped<GetTaskByIdHandler>();
     }
 
@@ -44,6 +45,11 @@ public static class DependencyInjection
         collection.AddScoped<IValidator<UserModel>, UserModelValidator>();
     }
 
+    public static void AddMappers(this IServiceCollection collection)
+    {
+        collection.AddScoped<IMapper<TestTask, TestTaskDto>, TestTaskMapper>();
+    }
+  
     public static void AddMappers(this IServiceCollection collection)
     {
         collection.AddScoped<IMapper<TestTask, TestTaskDto>, TestTaskMapper>();
