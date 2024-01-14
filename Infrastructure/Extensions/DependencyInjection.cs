@@ -19,5 +19,6 @@ public static class DependencyInjection
     {
         collection.AddScoped<IUserRepository, UserRepository>();
         collection.AddScoped<ITestTaskRepository, TestTaskRepository>();
+        collection.AddScoped<ICourseRepository, CourseRepository>();
     }
 }

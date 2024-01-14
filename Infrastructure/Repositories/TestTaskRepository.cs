@@ -17,4 +17,10 @@ public class TestTaskRepository(ApplicationDbContext context) : ITestTaskReposit
             .FirstOrDefaultAsync(tt => tt.Id == taskId, ct);
         return task;
     }
+
+    public async Task AddTestTaskToDatabaseAsync(TestTask task, CancellationToken ct = default)
+        => await context.TestTasks.AddAsync(task, ct);
+
+    public Task CommitChangesAsync(CancellationToken ct = default)
+        => context.SaveChangesAsync(ct);
 }

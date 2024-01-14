@@ -8,6 +8,8 @@ using Application.Models;
 using Application.Requests.Auth;
 using Application.Services.Auth.Implementations;
 using Application.Services.Auth.Interfaces;
+using Application.Services.Edu.Implementations;
+using Application.Services.Edu.Interfaces;
 using Application.Validators.Auth;
 using Application.Validators.ModelValidators;
 using Domain.Entities;
@@ -23,6 +25,7 @@ public static class DependencyInjection
         collection.AddScoped<IJwtTokenService, JwtTokenService>();
         collection.AddScoped<IAuthService, AuthService>();
         collection.AddScoped<IPermissionService, PermissionService>();
+        collection.AddScoped<ITestTaskService, TestTaskService>();
     }
 
     public static void AddHandlers(this IServiceCollection collection)
@@ -35,6 +38,7 @@ public static class DependencyInjection
         collection.AddScoped<UpdateProfileHandler>();
 
         collection.AddScoped<GetTaskByIdHandler>();
+        collection.AddScoped<CreateTaskHandler>();
     }
 
     public static void AddValidators(this IServiceCollection collection)
