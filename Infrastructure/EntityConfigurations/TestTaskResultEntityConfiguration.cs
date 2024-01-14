@@ -18,6 +18,6 @@ public class TestTaskResultEntityConfiguration : IEntityTypeConfiguration<TestTa
 
         builder.HasOne(ttr => ttr.Student)
             .WithMany(au => au.TestTaskResults)
-            .HasForeignKey(ttr => ttr.StudentUsername);
+            .HasForeignKey(ttr => ttr.StudentId);
     }
 }

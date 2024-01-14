@@ -8,11 +8,11 @@ public sealed class ApplicationDbContext : IdentityDbContext
 {
     public DbSet<ApplicationUser> Profiles => Set<ApplicationUser>();
     public DbSet<TestTask> TestTasks => Set<TestTask>();
+    public DbSet<Question> Questions => Set<Question>();
     public ApplicationDbContext() { }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
-        Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

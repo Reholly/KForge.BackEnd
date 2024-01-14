@@ -9,7 +9,11 @@ public class TestTaskRepository(ApplicationDbContext context) : ITestTaskReposit
 {
     public async Task<TestTask?> GetTaskByIdAsync(Guid taskId, CancellationToken ct = default)
     {
-        var task = await context.TestTasks.Include(tt => tt.Course)
+        var task = await context.TestTasks
+            .Include(tt => tt.Questions)!
+            .ThenInclude(q => q.AllVariants)
+            .Include(tt => tt.Questions)!
+            .ThenInclude(q => q.CorrectVariant)
             .FirstOrDefaultAsync(tt => tt.Id == taskId, ct);
         return task;
     }

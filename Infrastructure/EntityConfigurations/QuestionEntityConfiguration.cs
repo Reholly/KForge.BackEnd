@@ -17,7 +17,7 @@ public class QuestionEntityConfiguration : IEntityTypeConfiguration<Question>
             .HasForeignKey(av => av.QuestionId);
         
         builder.HasOne(q => q.CorrectVariant)
-            .WithOne(av => av.Question)
+            .WithOne(av => av.QuestionAsCorrect)
             .HasForeignKey<Question>(q => q.CorrectVariantId);
         
         builder.HasOne(q => q.TestTask)

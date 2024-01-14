@@ -18,7 +18,7 @@ public class TestTaskEntityConfiguration : IEntityTypeConfiguration<TestTask>
 
         builder.HasOne(tt => tt.Author)
             .WithMany(au => au.TasksAsAuthor)
-            .HasForeignKey(tt => tt.AuthorEmail);
+            .HasForeignKey(tt => tt.AuthorId);
 
         builder.HasMany(tt => tt.Questions)
             .WithOne(q => q.TestTask)

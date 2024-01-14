@@ -4,7 +4,7 @@ namespace Domain.Entities;
 
 public class TestTaskResult : EntityBase
 {
-    public required string StudentUsername { get; set; }
+    public required Guid StudentId { get; set; }
     public ApplicationUser? Student { get; set; }
     public Guid TestTaskId { get; set; }
     public TestTask? TestTask { get; set; }

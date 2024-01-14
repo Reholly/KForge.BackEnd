@@ -24,8 +24,8 @@ else
 {
     
 }
-   
-    
+
+builder.Services.AddMappers();
 builder.Services.AddApplicationServices();
 builder.Services.AddHandlers();
 builder.Services.AddValidators();

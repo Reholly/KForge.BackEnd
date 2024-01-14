@@ -7,5 +7,5 @@ public interface IPermissionService
 { 
     bool IsProfileOwner(string profileOwnerUsername, Claim[] tokenClaims);
     bool IsCourseMentor(string[] courseMentors, Claim[] tokenClaims);
-    bool IsInCourse(ApplicationUser user, Course course);
+    bool IsInCourse(ApplicationUser user, Guid courseId);
 }

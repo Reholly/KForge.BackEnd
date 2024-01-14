@@ -14,7 +14,7 @@ public class PermissionService : IPermissionService
         throw new NotImplementedException();
     }
 
-    public bool IsInCourse(ApplicationUser user, Course course)
-        => user.CoursesAsMentor.Contains(course)
-           || user.CoursesAsStudent.Contains(course);
+    public bool IsInCourse(ApplicationUser user, Guid courseId)
+        => user.CoursesAsMentor.FirstOrDefault(c => c.Id == courseId) is not null
+           || user.CoursesAsStudent.FirstOrDefault(c => c.Id == courseId) is not null;
 }

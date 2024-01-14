@@ -1,4 +1,5 @@
 ﻿using API.Extensions;
+using Application.DTO.Edu;
 using Application.Handlers.Edu.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ public class TasksController : ControllerBase
 {
     [Authorize(AuthenticationSchemes = "Bearer")]
     [HttpGet("{taskId}")]
-    public Task GetTaskById(
+    public Task<TestTaskDto> GetTaskById(
         [FromRoute] Guid taskId,
         [FromServices] GetTaskByIdHandler handler,
         CancellationToken ct = default)

@@ -18,5 +18,6 @@ public static class DependencyInjection
     public static void AddRepositories(this IServiceCollection collection)
     {
         collection.AddScoped<IUserRepository, UserRepository>();
+        collection.AddScoped<ITestTaskRepository, TestTaskRepository>();
     }
 }
