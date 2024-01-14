@@ -15,9 +15,5 @@ public class AnswerVariantEntityConfiguration : IEntityTypeConfiguration<AnswerV
         builder.HasOne(av => av.Question)
             .WithMany(q => q.AllVariants)
             .HasForeignKey(av => av.QuestionId);
-        
-        builder.HasOne(av => av.QuestionAsCorrect)
-            .WithOne(q => q.CorrectVariant)
-            .HasForeignKey<Question>(q => q.CorrectVariantId);
     }
 }

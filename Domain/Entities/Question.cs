@@ -8,6 +8,4 @@ public class Question : EntityBase
     public Guid TestTaskId { get; set; }
     public TestTask? TestTask { get; set; }
     public ICollection<AnswerVariant>? AllVariants { get; set; }
-    public Guid CorrectVariantId { get; set; }
-    public AnswerVariant? CorrectVariant { get; set; } 
 }

@@ -58,6 +58,9 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("boolean");
+
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uuid");
 
@@ -174,9 +177,6 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CorrectVariantId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("TestTaskId")
                         .HasColumnType("uuid");
 
@@ -185,9 +185,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CorrectVariantId")
-                        .IsUnique();
 
                     b.HasIndex("TestTaskId");
 
@@ -513,19 +510,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
                 {
-                    b.HasOne("Domain.Entities.AnswerVariant", "CorrectVariant")
-                        .WithOne("QuestionAsCorrect")
-                        .HasForeignKey("Domain.Entities.Question", "CorrectVariantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.TestTask", "TestTask")
                         .WithMany("Questions")
                         .HasForeignKey("TestTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CorrectVariant");
 
                     b.Navigation("TestTask");
                 });
@@ -626,11 +615,6 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.AnswerVariant", b =>
-                {
-                    b.Navigation("QuestionAsCorrect");
                 });
 
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>

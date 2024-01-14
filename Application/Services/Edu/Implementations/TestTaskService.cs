@@ -1,5 +1,4 @@
 ﻿using Application.Models;
-using Application.Services.Auth.Interfaces;
 using Application.Services.Edu.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces.Repositories;
@@ -35,14 +34,9 @@ public class TestTaskService(ITestTaskRepository testTaskRepository) : ITestTask
                     .Select(avDto => new AnswerVariant
                     {
                         Text = avDto.Text,
-                        Question = question
+                        Question = question,
+                        IsCorrect = avDto.IsCorrect
                     }).ToList();
-                var correctVariant = new AnswerVariant
-                {
-                    Text = qDto.CorrectVariant.Text,
-                    Question = question
-                };
-                question.CorrectVariant = correctVariant;
                 question.AllVariants = allVariants;
 
                 return question;

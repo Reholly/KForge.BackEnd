@@ -12,8 +12,7 @@ public class TestTaskRepository(ApplicationDbContext context) : ITestTaskReposit
         var task = await context.TestTasks
             .Include(tt => tt.Questions)!
             .ThenInclude(q => q.AllVariants)
-            .Include(tt => tt.Questions)!
-            .ThenInclude(q => q.CorrectVariant)
+            .Include(tt => tt.Questions)
             .FirstOrDefaultAsync(tt => tt.Id == taskId, ct);
         return task;
     }

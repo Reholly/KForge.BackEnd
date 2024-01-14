@@ -16,10 +16,6 @@ public class QuestionEntityConfiguration : IEntityTypeConfiguration<Question>
             .WithOne(av => av.Question)
             .HasForeignKey(av => av.QuestionId);
         
-        builder.HasOne(q => q.CorrectVariant)
-            .WithOne(av => av.QuestionAsCorrect)
-            .HasForeignKey<Question>(q => q.CorrectVariantId);
-        
         builder.HasOne(q => q.TestTask)
             .WithMany(tt => tt.Questions)
             .HasForeignKey(q => q.TestTaskId);

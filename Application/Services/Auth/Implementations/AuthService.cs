@@ -1,6 +1,4 @@
-using System.Collections.Specialized;
 using System.Security.Claims;
-using System.Web;
 using Application.Exceptions.Auth;
 using Application.Extensions;
 using Application.Models;
@@ -23,13 +21,16 @@ public class AuthService : IAuthService
     private readonly IConfiguration _configuration;
     
     private readonly IUserRepository _userRepository;
+    private readonly RoleManager<IdentityRole> _roleManager;
     
     public AuthService(
         SignInManager<IdentityUser> signInManager, 
         UserManager<IdentityUser> userManager, 
         IJwtTokenService tokenService,
         IConfiguration configuration, 
-        IUserRepository userRepository, IEmailService emailService)
+        IUserRepository userRepository, 
+        IEmailService emailService,
+        RoleManager<IdentityRole> roleManager)
     {
         _signInManager = signInManager;
         _userManager = userManager;
@@ -37,6 +38,7 @@ public class AuthService : IAuthService
         _configuration = configuration;
         _userRepository = userRepository;
         _emailService = emailService;
+        _roleManager = roleManager;
     }
     
     public async Task<AuthTokensModel> LoginAsync(string username, string password)
@@ -78,6 +80,13 @@ public class AuthService : IAuthService
 
     public async Task RegisterAsync(string username, string email, string password, ApplicationUser applicationUser, string role = "Student")
     {
+        string[] roles = { "Admin", "STUDENT" };
+        foreach (string role1 in roles)
+        {
+            if (!await _roleManager.RoleExistsAsync(role1))
+                await _roleManager.CreateAsync(new IdentityRole(role1));
+        }
+        
         var userByEmail = await _userManager.FindByEmailAsync(email);
         var userByUsername = await _userManager.FindByNameAsync(username);
         

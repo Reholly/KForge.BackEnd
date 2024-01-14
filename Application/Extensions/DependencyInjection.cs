@@ -9,13 +9,14 @@ using Application.Services.Auth.Implementations;
 using Application.Services.Auth.Interfaces;
 using Application.Services.Edu.Implementations;
 using Application.Services.Edu.Interfaces;
+using Application.Services.Utils.Implementations;
+using Application.Services.Utils.Interfaces;
 using Application.Validators.Auth;
 using Application.Validators.ModelValidators;
 using Domain.Entities;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using LoginRequest = Application.Requests.Auth.LoginRequest;
-using ResetPasswordRequest = Application.Requests.Auth.ResetPasswordRequest;
 
 namespace Application.Extensions;
 
@@ -24,6 +25,7 @@ public static class DependencyInjection
     public static void AddApplicationServices(this IServiceCollection collection)
     {
         collection.AddScoped<IJwtTokenService, JwtTokenService>();
+        collection.AddScoped<IEmailService, EmailService>();
         collection.AddScoped<IAuthService, AuthService>();
         collection.AddScoped<IPermissionService, PermissionService>();
         collection.AddScoped<ITestTaskService, TestTaskService>();
@@ -49,11 +51,6 @@ public static class DependencyInjection
         collection.AddScoped<IValidator<UserModel>, UserModelValidator>();
     }
 
-    public static void AddMappers(this IServiceCollection collection)
-    {
-        collection.AddScoped<IMapper<TestTask, TestTaskDto>, TestTaskMapper>();
-    }
-  
     public static void AddMappers(this IServiceCollection collection)
     {
         collection.AddScoped<IMapper<TestTask, TestTaskDto>, TestTaskMapper>();

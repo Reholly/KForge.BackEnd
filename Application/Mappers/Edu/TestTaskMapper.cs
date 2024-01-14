@@ -15,12 +15,9 @@ public class TestTaskMapper : IMapper<TestTask, TestTaskDto>
                     Text = q.Text,
                     AllVariants = q.AllVariants!.Select(av => new AnswerVariantDto
                     {
-                        Text = av.Text
-                    }).ToArray(),
-                    CorrectVariant = new AnswerVariantDto
-                    {
-                        Text = q.CorrectVariant!.Text
-                    }
+                        Text = av.Text,
+                        IsCorrect = av.IsCorrect
+                    }).ToArray()
                 }).ToArray()
         };
 }
