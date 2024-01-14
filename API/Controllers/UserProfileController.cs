@@ -1,8 +1,6 @@
 using API.Extensions;
 using Application.Handlers.Profile;
-using Application.Models;
 using Application.Requests.Profile;
-using Application.Requests.Wrappers;
 using Application.Responses.Profile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

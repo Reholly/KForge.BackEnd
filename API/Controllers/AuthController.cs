@@ -1,3 +1,4 @@
+using API.Extensions;
 using Application.Handlers.Auth;
 using Application.Requests.Auth;
 using Application.Responses.Auth;
@@ -18,14 +19,14 @@ public class AuthController : ControllerBase
         => handler.HandleAsync(request, ct);
     
     [HttpPost("login")]
-    public Task<LoginResponse> Register(
+    public Task<LoginResponse> Login(
         [FromBody] LoginRequest request,
         [FromServices] LoginHandler handler,
         CancellationToken ct = default)
         => handler.HandleAsync(request, ct);
     
     [HttpPost("refresh")]
-    public Task<RefreshTokenResponse> Register(
+    public Task<RefreshTokenResponse> Refresh(
         [FromBody] RefreshTokenRequest request,
         [FromServices] RefreshTokenHandler handler,
         CancellationToken ct = default)
@@ -37,4 +38,19 @@ public class AuthController : ControllerBase
     {
         return new List<string>{"HAHAL", "HHA", "FSFAF"};
     }
+
+    [HttpGet("confirm")]
+    public Task ConfirmEmail(
+        [FromQuery] string username,
+        [FromQuery] string code,
+        [FromServices] EmailConfirmHandler handler,
+        CancellationToken ct = default)
+        => handler.HandleAsync(username, code, ct);
+    
+    [HttpPost("reset")]
+    public Task ResetPassword(
+        [FromBody] ResetPasswordRequest request,
+        [FromServices] ResetPasswordHandler handler,
+        CancellationToken ct = default)
+        => handler.HandleAsync(request, HttpContext.GetJwtToken(), ct);
 }
