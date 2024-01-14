@@ -24,11 +24,11 @@ public class UserRepository(ApplicationDbContext context)
         return user;
     }
 
-    public async Task<ApplicationUser> GetByUsernameWithCoursesAsync(string username, CancellationToken ct = default)
+    public async Task<ApplicationUser?> GetByUsernameWithCoursesAsync(string username, CancellationToken ct = default)
     {
         var user = await _context.Profiles
             .Include(au => au.CoursesAsMentor)
-            .Include(au => au.TasksAsAuthor)
+            .Include(au => au.CoursesAsStudent)
             .FirstOrDefaultAsync(x => x.Username == username, ct);
 
         if (user is null)

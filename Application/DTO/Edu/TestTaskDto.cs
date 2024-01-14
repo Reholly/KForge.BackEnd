@@ -2,6 +2,6 @@
 
 public record TestTaskDto
 {
-    public required Guid Id { get; init; }
+    public required string Title { get; init; }
     public required QuestionDto[] Questions { get; init; } = Array.Empty<QuestionDto>();
 }

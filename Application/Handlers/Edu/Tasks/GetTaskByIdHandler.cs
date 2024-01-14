@@ -39,7 +39,7 @@ public class GetTaskByIdHandler(
             return testTaskMapper.Map(testTask!);
         }
 
-        if (!permissionService.IsInCourse(user, testTask!.CourseId))
+        if (!permissionService.IsInCourse(user!, testTask!.CourseId))
         {
             throw new PermissionDeniedException($"User with username {username} " +
                                                 $"is not in course {testTask.Course!.Title}");

@@ -1,6 +1,7 @@
 ﻿using API.Extensions;
 using Application.DTO.Edu;
 using Application.Handlers.Edu.Tasks;
+using Application.Requests.Education.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,4 +18,12 @@ public class TasksController : ControllerBase
         [FromServices] GetTaskByIdHandler handler,
         CancellationToken ct = default)
         => handler.HandleAsync(taskId, HttpContext.GetJwtToken(), ct);
+
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    [HttpPost]
+    public Task CreateTask(
+        [FromBody] CreateTaskRequest request,
+        [FromServices] CreateTaskHandler handler,
+        CancellationToken ct = default)
+        => handler.HandleAsync(request, HttpContext.GetJwtToken(), ct);
 }

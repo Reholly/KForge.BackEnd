@@ -8,11 +8,9 @@ public class PermissionService : IPermissionService
 {
     public bool IsProfileOwner(string profileOwnerUsername, Claim[] tokenClaims) 
         => tokenClaims.FirstOrDefault(x => x.Value == profileOwnerUsername) is not null;
-    
-    public bool IsCourseMentor(string[] courseMentors, Claim[] tokenClaims)
-    {
-        throw new NotImplementedException();
-    }
+
+    public bool IsCourseMentor(ApplicationUser user, Guid courseId)
+        => user.CoursesAsMentor.FirstOrDefault(c => c.Id == courseId) is not null;
 
     public bool IsInCourse(ApplicationUser user, Guid courseId)
         => user.CoursesAsMentor.FirstOrDefault(c => c.Id == courseId) is not null
