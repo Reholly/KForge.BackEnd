@@ -8,8 +8,8 @@
 
     <ItemGroup>
         <Reference Include="Microsoft.AspNetCore.Identity">
-            <HintPath>..\..\..\..\..\..\usr\share\dotnet\shared\Microsoft.AspNetCore.App\8.0.0\Microsoft.AspNetCore.Identity.dll</HintPath>
-        </Reference>
+            <HintPath>..\..\..\..\..\..\usr\share\dotnet\shared\Microsoft.AspNetCore.App\8.0.1\Microsoft.AspNetCore.Identity.dll</HintPath>
+        </Reference>  
         <Reference Include="Microsoft.IdentityModel.Tokens">
             <HintPath>..\..\..\..\.nuget\packages\microsoft.identitymodel.tokens\7.0.3\lib\net8.0\Microsoft.IdentityModel.Tokens.dll</HintPath>
         </Reference>

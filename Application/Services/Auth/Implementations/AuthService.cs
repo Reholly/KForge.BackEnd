@@ -1,6 +1,4 @@
-using System.Collections.Specialized;
 using System.Security.Claims;
-using System.Web;
 using Application.Exceptions.Auth;
 using Application.Extensions;
 using Application.Models;
