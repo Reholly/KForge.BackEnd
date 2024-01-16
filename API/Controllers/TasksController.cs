@@ -42,4 +42,12 @@ public class TasksController : ControllerBase
         [FromServices] DeleteTaskHandler handler,
         CancellationToken ct = default)
         => handler.HandleAsync(taskId, HttpContext.GetJwtToken(), ct);
+
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    [HttpPost("{taskId}")]
+    public Task<TestTaskResultDto> PassTestTask(
+        [FromBody, FromRoute] PassTestTaskRequest request,
+        [FromServices] PassTestTaskHandler handler,
+        CancellationToken ct = default)
+        => handler.HandleAsync(request, HttpContext.GetJwtToken(), ct);
 }

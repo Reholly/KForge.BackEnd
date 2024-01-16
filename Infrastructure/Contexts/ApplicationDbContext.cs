@@ -9,6 +9,7 @@ public sealed class ApplicationDbContext : IdentityDbContext
     public DbSet<ApplicationUser> Profiles => Set<ApplicationUser>();
     public DbSet<TestTask> TestTasks => Set<TestTask>();
     public DbSet<Course> Courses => Set<Course>();
+    public DbSet<TestTaskResult> Results => Set<TestTaskResult>();
     public ApplicationDbContext() { }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

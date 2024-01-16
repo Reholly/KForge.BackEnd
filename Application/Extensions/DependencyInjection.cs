@@ -44,6 +44,7 @@ public static class DependencyInjection
         collection.AddScoped<CreateTaskHandler>();
         collection.AddScoped<UpdateTaskHandler>();
         collection.AddScoped<DeleteTaskHandler>();
+        collection.AddScoped<PassTestTaskHandler>();
     }
 
     public static void AddValidators(this IServiceCollection collection)
@@ -56,5 +57,6 @@ public static class DependencyInjection
     public static void AddMappers(this IServiceCollection collection)
     {
         collection.AddScoped<IMapper<TestTask, TestTaskDto>, TestTaskMapper>();
+        collection.AddScoped<IMapper<TestTaskResult, TestTaskResultDto>, TestTaskResultMapper>();
     }
 }
