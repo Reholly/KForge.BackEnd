@@ -22,10 +22,12 @@ public class TestTaskEntityConfiguration : IEntityTypeConfiguration<TestTask>
 
         builder.HasMany(tt => tt.Questions)
             .WithOne(q => q.TestTask)
-            .HasForeignKey(q => q.TestTaskId);
+            .HasForeignKey(q => q.TestTaskId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(tt => tt.Results)
             .WithOne(ttr => ttr.TestTask)
-            .HasForeignKey(ttr => ttr.TestTaskId);
+            .HasForeignKey(ttr => ttr.TestTaskId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

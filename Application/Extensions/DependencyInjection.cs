@@ -43,6 +43,7 @@ public static class DependencyInjection
         collection.AddScoped<GetTaskByIdHandler>();
         collection.AddScoped<CreateTaskHandler>();
         collection.AddScoped<UpdateTaskHandler>();
+        collection.AddScoped<DeleteTaskHandler>();
     }
 
     public static void AddValidators(this IServiceCollection collection)

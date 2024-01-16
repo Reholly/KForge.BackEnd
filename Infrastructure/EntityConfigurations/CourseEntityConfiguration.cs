@@ -21,6 +21,7 @@ public class CourseEntityConfiguration : IEntityTypeConfiguration<Course>
 
         builder.HasMany(c => c.TestTasks)
             .WithOne(tt => tt.Course)
-            .HasForeignKey(tt => tt.CourseId);
+            .HasForeignKey(tt => tt.CourseId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

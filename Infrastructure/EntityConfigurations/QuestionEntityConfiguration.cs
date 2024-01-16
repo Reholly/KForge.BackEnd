@@ -14,7 +14,8 @@ public class QuestionEntityConfiguration : IEntityTypeConfiguration<Question>
 
         builder.HasMany(q => q.AllVariants)
             .WithOne(av => av.Question)
-            .HasForeignKey(av => av.QuestionId);
+            .HasForeignKey(av => av.QuestionId)
+            .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasOne(q => q.TestTask)
             .WithMany(tt => tt.Questions)

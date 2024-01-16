@@ -23,6 +23,9 @@ public class TestTaskRepository(ApplicationDbContext context) : ITestTaskReposit
     public Task UpdateTaskAsync(TestTask task, CancellationToken ct = default)
         => Task.Run(() => context.TestTasks.Update(task), ct);
 
+    public Task DeleteTaskAsync(TestTask task, CancellationToken ct = default)
+        => Task.Run(() => context.TestTasks.Remove(task), ct);
+
     public Task CommitChangesAsync(CancellationToken ct = default)
         => context.SaveChangesAsync(ct);
 }

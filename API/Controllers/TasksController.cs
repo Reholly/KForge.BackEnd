@@ -34,4 +34,12 @@ public class TasksController : ControllerBase
         [FromServices] UpdateTaskHandler handler,
         CancellationToken ct = default)
         => handler.HandleAsync(request, HttpContext.GetJwtToken(), ct);
+
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    [HttpDelete("{taskId}")]
+    public Task DeleteTask(
+        [FromRoute] Guid taskId,
+        [FromServices] DeleteTaskHandler handler,
+        CancellationToken ct = default)
+        => handler.HandleAsync(taskId, HttpContext.GetJwtToken(), ct);
 }
