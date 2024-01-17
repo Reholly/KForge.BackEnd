@@ -4,13 +4,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Contexts;
 
-public class ApplicationDbContext : IdentityDbContext
+public sealed class ApplicationDbContext : IdentityDbContext
 {
     public DbSet<ApplicationUser> Profiles => Set<ApplicationUser>();
+    public DbSet<TestTask> TestTasks => Set<TestTask>();
+    public DbSet<Course> Courses => Set<Course>();
+    public DbSet<TestTaskResult> Results => Set<TestTaskResult>();
     public ApplicationDbContext() { }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
-        Database.EnsureCreated();
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+        builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
     }
 }

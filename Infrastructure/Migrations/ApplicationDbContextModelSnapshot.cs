@@ -22,6 +22,68 @@ namespace Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("ApplicationUserCourse", b =>
+                {
+                    b.Property<Guid>("CoursesAsMentorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("MentorsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CoursesAsMentorId", "MentorsId");
+
+                    b.HasIndex("MentorsId");
+
+                    b.ToTable("ApplicationUserCourse");
+                });
+
+            modelBuilder.Entity("ApplicationUserCourse1", b =>
+                {
+                    b.Property<Guid>("CoursesAsStudentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("StudentsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CoursesAsStudentId", "StudentsId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("ApplicationUserCourse1");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AnswerVariant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastlyEditedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("AnswerVariant", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
                 {
                     b.Property<Guid>("Id")
@@ -29,6 +91,15 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("BirthDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("LastlyEditedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
@@ -49,7 +120,218 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Profiles");
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("ApplicationUser", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Course", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("AcademicHoursDuration")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("LastlyEditedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Title");
+
+                    b.ToTable("Course", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Lecture", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("EditAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("LastlyEditedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("SectionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("Lecture", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Question", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("LastlyEditedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("TestTaskId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestTaskId");
+
+                    b.ToTable("Question", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Section", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("LastlyEditedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Section");
+                });
+
+            modelBuilder.Entity("Domain.Entities.TestTask", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("LastlyEditedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("TestTask", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.TestTaskResult", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CorrectAnswersCount")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("LastlyEditedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double>("ResultInPercents")
+                        .HasColumnType("double precision");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TestTaskId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("TotalQuestionsCount")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TestTaskId");
+
+                    b.ToTable("Result", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -248,6 +530,114 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ApplicationUserCourse", b =>
+                {
+                    b.HasOne("Domain.Entities.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CoursesAsMentorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("MentorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ApplicationUserCourse1", b =>
+                {
+                    b.HasOne("Domain.Entities.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CoursesAsStudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.AnswerVariant", b =>
+                {
+                    b.HasOne("Domain.Entities.Question", "Question")
+                        .WithMany("AllVariants")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Lecture", b =>
+                {
+                    b.HasOne("Domain.Entities.Section", null)
+                        .WithMany("Lectures")
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Question", b =>
+                {
+                    b.HasOne("Domain.Entities.TestTask", "TestTask")
+                        .WithMany("Questions")
+                        .HasForeignKey("TestTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TestTask");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Section", b =>
+                {
+                    b.HasOne("Domain.Entities.Course", null)
+                        .WithMany("Sections")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.TestTask", b =>
+                {
+                    b.HasOne("Domain.Entities.ApplicationUser", "Author")
+                        .WithMany("TasksAsAuthor")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Course", "Course")
+                        .WithMany("TestTasks")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("Domain.Entities.TestTaskResult", b =>
+                {
+                    b.HasOne("Domain.Entities.ApplicationUser", "Student")
+                        .WithMany("TestTaskResults")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.TestTask", "TestTask")
+                        .WithMany("Results")
+                        .HasForeignKey("TestTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("TestTask");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -297,6 +687,37 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("TasksAsAuthor");
+
+                    b.Navigation("TestTaskResults");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Course", b =>
+                {
+                    b.Navigation("Sections");
+
+                    b.Navigation("TestTasks");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Question", b =>
+                {
+                    b.Navigation("AllVariants");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Section", b =>
+                {
+                    b.Navigation("Lectures");
+                });
+
+            modelBuilder.Entity("Domain.Entities.TestTask", b =>
+                {
+                    b.Navigation("Questions");
+
+                    b.Navigation("Results");
                 });
 #pragma warning restore 612, 618
         }

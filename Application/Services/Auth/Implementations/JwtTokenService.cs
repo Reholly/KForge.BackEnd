@@ -23,7 +23,10 @@ public class JwtTokenService : IJwtTokenService
 
     public string GenerateRefreshToken(int expiresInSeconds, string username)
     {
-        return GenerateJwtToken(expiresInSeconds, [new Claim(ClaimTypes.UserData, username)]);
+        return GenerateJwtToken(expiresInSeconds, new[]
+        {
+            new Claim(ClaimTypes.UserData, username)
+        });
     }
 
     public async Task<bool> IsJwtTokenValidAsync(string jwtToken, bool validateLifeTime)
@@ -45,7 +48,7 @@ public class JwtTokenService : IJwtTokenService
             
             return true;
         }
-        catch (SecurityTokenValidationException e)
+        catch (SecurityTokenValidationException)
         {
             return false;
         }
