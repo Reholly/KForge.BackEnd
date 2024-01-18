@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using System.Text.Json;
 using API.ErrorHandling;
+using Application.Exceptions;
 using Application.Exceptions.Auth;
 using FluentValidation;
 
