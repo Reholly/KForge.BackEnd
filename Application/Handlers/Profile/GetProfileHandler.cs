@@ -1,6 +1,4 @@
 using Application.Models;
-using Application.Requests.Profile;
-using Application.Requests.Wrappers;
 using Application.Responses.Profile;
 using Application.Services.Auth.Interfaces;
 using Domain.Interfaces.Repositories;

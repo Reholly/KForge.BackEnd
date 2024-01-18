@@ -32,7 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Validators\Edu\Tasks\" />
+      <Folder Include="Handlers\Admin\" />
     </ItemGroup>
 
 </Project>
