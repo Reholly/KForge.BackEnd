@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Services.Auth.Interfaces;
+namespace Application.Services.Admin.Interfaces;
 
 public interface IRoleService
 {

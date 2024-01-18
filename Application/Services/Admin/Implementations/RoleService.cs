@@ -1,8 +1,9 @@
 using Application.Exceptions.Auth;
+using Application.Services.Admin.Interfaces;
 using Application.Services.Auth.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Services.Auth.Implementations;
+namespace Application.Services.Admin.Implementations;
 
 public class RoleService : IRoleService
 {
