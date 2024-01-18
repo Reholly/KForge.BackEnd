@@ -27,7 +27,8 @@ public class AuthService : IAuthService
         UserManager<IdentityUser> userManager, 
         IJwtTokenService tokenService,
         IConfiguration configuration, 
-        IUserRepository userRepository, IEmailService emailService)
+        IUserRepository userRepository, 
+        IEmailService emailService)
     {
         _signInManager = signInManager;
         _userManager = userManager;
