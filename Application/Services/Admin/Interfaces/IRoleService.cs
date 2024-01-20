@@ -6,6 +6,9 @@ public interface IRoleService
 {
     Task AttachRoleAsync(string role, string username);
     Task AttachRoleAsync(string role, IdentityUser user);
+
+    Task DetachRoleAsync(string role, string username);
+    Task DetachRoleAsync(string role, IdentityUser user);
     Task CreateRoleAsync(string role);
     Task DeleteRoleAsync(string role);
 }

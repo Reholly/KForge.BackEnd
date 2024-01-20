@@ -118,7 +118,7 @@ public class AuthService : IAuthService
         await _userRepository.CommitAsync();
         
         if (!roleAttachingResult.Succeeded)
-            throw new RoleAttachingException(String.Join(",", roleAttachingResult.Errors.Select(x => x.Description)));
+            throw new RoleException(String.Join(",", roleAttachingResult.Errors.Select(x => x.Description)));
     }
 
     public async Task ConfirmEmailAsync(string username, string code)
