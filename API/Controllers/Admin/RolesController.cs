@@ -3,38 +3,40 @@ using Application.Handlers.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers;
+namespace API.Controllers.Admin;
 
 [Authorize(Roles = "Admin")]
 [ApiController]
-[Route("/api/admin")]
-public class AdminController : ControllerBase
+[Route("/api/admin/roles")]
+public class RolesController : ControllerBase
 {
-    [HttpPost("/roles/create")]
+    [HttpPost("/add")]
     public Task CreateRole(
         [FromServices] CreateRoleHandler handler,
         [FromBody] RoleDto dto,
         CancellationToken ct = default)
         => handler.HandleAsync(dto, ct);
     
-    [HttpPost("/roles/delete")]
+    [HttpPost("/delete")]
     public Task DeleteRole(
         [FromServices] DeleteRoleHandler handler,
         RoleDto dto,
         CancellationToken ct = default)
         => handler.HandleAsync(dto, ct);
     
-    [HttpPost("/mentor/add")]
+    [HttpPost("/add/mentor")]
     public Task AddMentorRole( 
         [FromServices] AddMentorHandler handler,
         UsernameDto dto,
         CancellationToken ct = default)
         => handler.HandleAsync(dto, ct);
     
-    [HttpPost("/mentor/remove")]
+    [HttpPost("/delete/mentor")]
     public Task RemoveMentorRole(
         [FromServices] RemoveMentorHandler handler,
         UsernameDto dto,
         CancellationToken ct = default)
         => handler.HandleAsync(dto, ct);
+    
+    
 }

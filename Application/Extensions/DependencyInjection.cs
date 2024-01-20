@@ -1,10 +1,13 @@
 using Application.DTO.Edu;
+using Application.Handlers.Admin;
 using Application.Handlers.Auth;
 using Application.Handlers.Edu.Tasks;
 using Application.Handlers.Profile;
 using Application.Mappers;
 using Application.Mappers.Edu;
 using Application.Models;
+using Application.Services.Admin.Implementations;
+using Application.Services.Admin.Interfaces;
 using Application.Services.Auth.Implementations;
 using Application.Services.Auth.Interfaces;
 using Application.Services.Edu.Implementations;
@@ -29,6 +32,7 @@ public static class DependencyInjection
         collection.AddScoped<IAuthService, AuthService>();
         collection.AddScoped<IPermissionService, PermissionService>();
         collection.AddScoped<ITestTaskService, TestTaskService>();
+        collection.AddScoped<IRoleService, RoleService>();
     }
 
     public static void AddHandlers(this IServiceCollection collection)
@@ -45,6 +49,11 @@ public static class DependencyInjection
         collection.AddScoped<UpdateTaskHandler>();
         collection.AddScoped<DeleteTaskHandler>();
         collection.AddScoped<PassTestTaskHandler>();
+
+        collection.AddScoped<AddMentorHandler>();
+        collection.AddScoped<RemoveMentorHandler>();
+        collection.AddScoped<CreateRoleHandler>();
+        collection.AddScoped<DeleteRoleHandler>();
     }
 
     public static void AddValidators(this IServiceCollection collection)
