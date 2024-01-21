@@ -26,28 +26,19 @@ public class LoginService(
 
         var user = await _userManager.FindByNameAsync(dto.Username);
         
-        if (user is null)
-            throw new NotFoundException("User does not exist.");
-        
-        var roles = await  _userManager.GetRolesAsync(user);
+        var roles = await  _userManager.GetRolesAsync(user!);
 
         var claims = new List<Claim>();
 
         foreach (var role in roles)
             claims.Add(new Claim(ClaimTypes.Role, role));
-        
-        claims.Add(new Claim(ClaimTypes.UserData, dto.Username));
 
-        var accessTokenExpiresInSeconds = 5;//int.Parse(_configuration["Jwt:AccessTokenExpiresInSeconds"]!);
-        var refreshTokenExpiresInSeconds = 5;//int.Parse(_configuration["Jwt:RefreshTokenExpiresInSeconds"]!);
+        var usernameClaim = new Claim(ClaimTypes.UserData, dto.Username);
+        claims.Add(usernameClaim);
         
-        var accessToken = _tokenService.GenerateAccessToken(accessTokenExpiresInSeconds, claims.ToArray());
-        var refreshToken = _tokenService.GenerateRefreshToken(refreshTokenExpiresInSeconds, dto.Username);
+        var accessToken = _tokenService.GenerateAccessToken(claims.ToArray());
+        var refreshToken = _tokenService.GenerateRefreshToken([usernameClaim]);
 
-        return new AuthTokensModel(
-            refreshToken, 
-            accessToken, 
-            accessTokenExpiresInSeconds, 
-            refreshTokenExpiresInSeconds); 
+        return new AuthTokensModel(refreshToken, accessToken);
     }
 }

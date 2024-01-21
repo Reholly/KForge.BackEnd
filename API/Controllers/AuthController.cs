@@ -43,11 +43,10 @@ public class AuthController : ControllerBase
 
     [HttpGet("confirm")]
     public Task ConfirmEmail(
-        [FromQuery] string username,
-        [FromQuery] string code,
+        [FromQuery, FromRoute] ConfirmEmailDto dto, 
         [FromServices] EmailConfirmHandler handler,
         CancellationToken ct = default)
-        => handler.HandleAsync(username, code, ct);
+        => handler.HandleAsync(dto.Username, dto.Code, ct);
     
     [HttpPost("reset")]
     public Task ResetPassword(

@@ -4,8 +4,8 @@ namespace Application.Services.Auth.Interfaces;
 
 public interface IJwtTokenService
 {
-    string GenerateAccessToken(int expiresInSeconds, Claim[] claims);
-    string GenerateRefreshToken(int expiresInSeconds, string username);
-    Task<bool> IsJwtTokenValidAsync(string jwtToken, bool validateLifeTime);
+    string GenerateAccessToken(Claim[] claims);
+    string GenerateRefreshToken(Claim[] claims);
     Claim[] ParseClaims(string jwtToken);
+    Task<bool> IsJwtTokenValidAsync(string jwtToken, bool validateLifeTime);
 }

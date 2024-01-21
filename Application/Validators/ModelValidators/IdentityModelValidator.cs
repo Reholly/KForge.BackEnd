@@ -1,9 +1,10 @@
+using Application.DTO.Auth;
 using Application.Models;
 using FluentValidation;
 
 namespace Application.Validators.ModelValidators;
 
-public class IdentityModelValidator : AbstractValidator<IdentityModel>
+public class IdentityModelValidator : AbstractValidator<IdentityUserDto>
 {
     public IdentityModelValidator()
     {

@@ -62,20 +62,15 @@ public class AuthService : IAuthService
 
         foreach (var role in roles)
             claims.Add(new Claim(ClaimTypes.Role, role));
-        
+
+        var usernameClaim = new Claim(ClaimTypes.UserData, username);
         claims.Add(new Claim(ClaimTypes.UserData, username));
 
-        var accessTokenExpiresInSeconds = int.Parse(_configuration["Jwt:AccessTokenExpiresInSeconds"]!);
-        var refreshTokenExpiresInSeconds = int.Parse(_configuration["Jwt:RefreshTokenExpiresInSeconds"]!);
         
-        var accessToken = _tokenService.GenerateAccessToken(accessTokenExpiresInSeconds, claims.ToArray());
-        var refreshToken = _tokenService.GenerateRefreshToken(refreshTokenExpiresInSeconds, username);
+        var accessToken = _tokenService.GenerateAccessToken(claims.ToArray());
+        var refreshToken = _tokenService.GenerateRefreshToken([usernameClaim]);
 
-        return new AuthTokensModel(
-            refreshToken, 
-            accessToken, 
-            accessTokenExpiresInSeconds, 
-            refreshTokenExpiresInSeconds); 
+        return new AuthTokensModel(refreshToken, accessToken); 
     }
 
     public async Task RegisterAsync(string username, string email, string password, ApplicationUser applicationUser, string role = "Student")

@@ -62,7 +62,7 @@ public static class DependencyInjection
     public static void AddValidators(this IServiceCollection collection)
     {
         collection.AddScoped<IValidator<LogInDto>, LoginRequestValidator>();
-        collection.AddScoped<IValidator<IdentityModel>, IdentityModelValidator>();
+        collection.AddScoped<IValidator<IdentityUserDto>, IdentityModelValidator>();
         collection.AddScoped<IValidator<ApplicationUserDto>, UserModelValidator>();
     }
 

@@ -11,45 +11,37 @@ namespace Application.Handlers.Auth;
 
 public class RefreshTokenHandler(
     IJwtTokenService tokenService, 
-    IConfiguration configuration, 
     IMemoryCache refreshTokensCache)
 {
-    private readonly IConfiguration _configuration = configuration;
     private readonly IJwtTokenService _tokenService = tokenService;
     private readonly IMemoryCache _refreshTokensCache = refreshTokensCache;
 
     public async Task<RefreshTokenResponse> HandleAsync(RefreshTokenDto dto, CancellationToken ct = default)
     {
-        var accessTokenExpiresInSeconds = int.Parse(_configuration["Jwt:AccessTokenExpiresInSeconds"]!);
-        var refreshTokenExpiresInSecond = int.Parse(_configuration["Jwt:RefreshTokenExpiresInSeconds"]!);
-        
-        _refreshTokensCache.TryGetValue(dto.RefreshToken, out string? email);
+        _refreshTokensCache.TryGetValue(dto.RefreshToken, out string? oldUsername);
 
-        if (email is null)
+        if (oldUsername is null)
             throw new UnauthorizedException("Refresh token is expired or invalid.");
 
         bool isValid = await _tokenService.IsJwtTokenValidAsync(dto.ExpiredAccessToken, false);
+        
         if (!isValid)
             throw new UnauthorizedException("Expired access token is invalid by Key. ");
         
         var refreshTokenClaims = _tokenService.ParseClaims(dto.RefreshToken);
         
-        var refreshTokenEmail = refreshTokenClaims.First(x => x.Type == ClaimTypes.Email).Value.ToString();
+        var username = refreshTokenClaims.First(x => x.Type == ClaimTypes.UserData).Value.ToString();
 
-        if (refreshTokenEmail != email)
+        if (username != oldUsername)
             throw new UnauthorizedException("Refresh token is invalid. No matches access with refresh tokens.");
-
-        var newRefreshToken = _tokenService.GenerateRefreshToken(refreshTokenExpiresInSecond, refreshTokenEmail);
-        var newAccessToken = _tokenService.GenerateAccessToken(accessTokenExpiresInSeconds, _tokenService.ParseClaims(dto.ExpiredAccessToken));
-
-        _refreshTokensCache.Set(newRefreshToken, refreshTokenEmail);
-        _refreshTokensCache.Remove(dto.RefreshToken);
         
-        var authTokens = new AuthTokensModel(
-            newRefreshToken,
-            newAccessToken,
-            accessTokenExpiresInSeconds,
-            refreshTokenExpiresInSecond);
+        var newRefreshToken = _tokenService.GenerateRefreshToken([new Claim(ClaimTypes.UserData, username)]);
+        var newAccessToken = _tokenService.GenerateAccessToken(_tokenService.ParseClaims(dto.ExpiredAccessToken));
+
+        _refreshTokensCache.Set(newRefreshToken, username);
+        _refreshTokensCache.Remove(dto.RefreshToken);
+
+        var authTokens = new AuthTokensModel(newRefreshToken, newAccessToken);
         
         return new RefreshTokenResponse
         {

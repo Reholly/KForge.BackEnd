@@ -1,6 +1,6 @@
-namespace Application.Models;
+namespace Application.DTO.Auth;
 
-public record IdentityModel(
+public record IdentityUserDto(
     string Username, 
     string Email, 
     string Password);
