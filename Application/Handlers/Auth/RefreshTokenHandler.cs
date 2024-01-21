@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Application.Exceptions.Auth;
+using Application.Exceptions.Common;
 using Application.Models;
 using Application.Requests.Auth;
 using Application.Responses.Auth;
@@ -26,18 +26,18 @@ public class RefreshTokenHandler(
         _refreshTokensCache.TryGetValue(request.RefreshToken, out string? email);
 
         if (email is null)
-            throw new JwtTokenRefreshException("Refresh token is expired or invalid.");
+            throw new UnauthorizedException("Refresh token is expired or invalid.");
 
         bool isValid = await _tokenService.IsJwtTokenValidAsync(request.ExpiredAccessToken, false);
         if (!isValid)
-            throw new JwtTokenRefreshException("Expired access token is invalid by Key. ");
+            throw new UnauthorizedException("Expired access token is invalid by Key. ");
         
         var refreshTokenClaims = _tokenService.ParseClaims(request.RefreshToken);
         
         var refreshTokenEmail = refreshTokenClaims.First(x => x.Type == ClaimTypes.Email).Value.ToString();
 
         if (refreshTokenEmail != email)
-            throw new JwtTokenRefreshException("Refresh token is invalid. No matches access with refresh tokens.");
+            throw new UnauthorizedException("Refresh token is invalid. No matches access with refresh tokens.");
 
         var newRefreshToken = _tokenService.GenerateRefreshToken(refreshTokenExpiresInSecond, refreshTokenEmail);
         var newAccessToken = _tokenService.GenerateAccessToken(accessTokenExpiresInSeconds, _tokenService.ParseClaims(request.ExpiredAccessToken));

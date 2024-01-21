@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
-using Application.Exceptions;
-using Application.Exceptions.Auth;
+using Application.Exceptions.Common;
 using Application.Models;
 using Application.Requests.Education.Tasks;
 using Application.Services.Auth.Interfaces;

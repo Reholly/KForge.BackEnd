@@ -1,4 +1,4 @@
-using Application.Exceptions.Auth;
+using Application.Exceptions.Common;
 using Application.Requests.Profile;
 using Application.Services.Auth.Interfaces;
 using Domain.Interfaces.Repositories;

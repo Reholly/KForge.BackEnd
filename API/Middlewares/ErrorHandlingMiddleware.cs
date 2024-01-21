@@ -1,9 +1,8 @@
 using System.Net.Mime;
 using System.Text.Json;
 using API.ErrorHandling;
-using Application.Exceptions;
-using Application.Exceptions.Auth;
 using FluentValidation;
+using ApplicationException = Application.Exceptions.Common.ApplicationException;
 
 namespace API.Middlewares;
 
@@ -29,7 +28,7 @@ public class ErrorHandlingMiddleware : IMiddleware
                             .Select(x => $"{x.ErrorCode} : {x.ErrorMessage}")
                     });
                     break;
-                case ApplicationLayerException applicationLayerException:
+                case ApplicationException applicationLayerException:
                     context.Response.StatusCode = applicationLayerException.ErrorCode;
                     errorMessage = JsonSerializer.Serialize(new ServerErrorResponseModel
                     {

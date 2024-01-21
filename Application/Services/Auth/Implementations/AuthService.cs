@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Application.Exceptions.Auth;
+using Application.Exceptions.Common;
 using Application.Extensions;
 using Application.Models;
 using Application.Services.Auth.Interfaces;
@@ -46,15 +46,15 @@ public class AuthService : IAuthService
         var result = await _signInManager.PasswordSignInAsync(username, password, false, false);
         
         if (!result.Succeeded)
-            throw new LoginFailedException("Not allowed.");
+            throw new UnauthorizedException("Not allowed.");
 
         var user = await _userManager.FindByNameAsync(username);
         
         if (user is null)
-            throw new LoginFailedException("User does not exist.");
+            throw new NotFoundException("User does not exist.");
 
         if (!user.EmailConfirmed)
-            throw new LoginFailedException("Confirm your email.");
+            throw new UnauthorizedException("Confirm your email.");
         
         var roles = await  _userManager.GetRolesAsync(user);
 
@@ -84,9 +84,9 @@ public class AuthService : IAuthService
         var userByUsername = await _userManager.FindByNameAsync(username);
         
         if (userByEmail is not null)
-            throw new RegistrationFailedException($"User with email: {email} already exists.");
+            throw new ConflictException($"User with email: {email} already exists.");
         if (userByUsername is not null)
-            throw new RegistrationFailedException($"User with username: {username} already exists.");
+            throw new ConflictException($"User with username: {username} already exists.");
 
         var user = new IdentityUser
         { 
@@ -97,7 +97,7 @@ public class AuthService : IAuthService
         var result = await _userManager.CreateAsync(user, password);
         
         if (!result.Succeeded)
-            throw new RegistrationFailedException(String.Join(",", result.Errors.Select(x => x.Description)));
+            throw new ServiceException(String.Join(",", result.Errors.Select(x => x.Description)));
 
         var confirmationCode = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
@@ -118,7 +118,7 @@ public class AuthService : IAuthService
         await _userRepository.CommitAsync();
         
         if (!roleAttachingResult.Succeeded)
-            throw new RoleException(String.Join(",", roleAttachingResult.Errors.Select(x => x.Description)));
+            throw new ServiceException(String.Join(",", roleAttachingResult.Errors.Select(x => x.Description)));
     }
 
     public async Task ConfirmEmailAsync(string username, string code)
@@ -126,15 +126,15 @@ public class AuthService : IAuthService
         var user = await _userManager.FindByNameAsync(username);
         
         if (user is null)
-            throw new RegistrationFailedException("No user with such username.");
+            throw new NotFoundException("No user with such username.");
         
         if(code is null)
-            throw new RegistrationFailedException("Invalid confirmation code.");
+            throw new BadRequestException("Invalid confirmation code (null).");
 
         var result = await _userManager.ConfirmEmailAsync(user, code);
         
         if(!result.Succeeded)
-            throw new RegistrationFailedException(String.Join(",", result.Errors.Select(x => x.Description)));
+            throw new ServiceException(String.Join(",", result.Errors.Select(x => x.Description)));
     }
 
     public async Task ResetPasswordAsync(string username, string newPassword)
@@ -142,7 +142,7 @@ public class AuthService : IAuthService
         var user = await _userManager.FindByNameAsync(username);
 
         if (user is null)
-            throw new PasswordResetException("Could not reset password: user with such username does no exist.");
+            throw new NotFoundException("Could not reset password: user with such username does no exist.");
         
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
         

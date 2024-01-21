@@ -1,6 +1,6 @@
-﻿namespace Application.Exceptions;
+﻿namespace Application.Exceptions.Common;
 
-public class NotFoundException(string message) : ApplicationLayerException(message, 404)
+public class NotFoundException(string message) : ApplicationException(message, 404)
 {
     public static void ThrowIfNull(object? o, string argumentName)
     {

@@ -1,4 +1,4 @@
-using Application.Exceptions.Auth;
+using Application.Exceptions.Common;
 using Application.Requests.Auth;
 using Application.Services.Auth.Interfaces;
 using FluentValidation;

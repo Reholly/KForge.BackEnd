@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
+[Authorize(AuthenticationSchemes = "Bearer")]
 [Route("/api/edu/[controller]")]
 public class TasksController : ControllerBase
 {
-    [Authorize(AuthenticationSchemes = "Bearer")]
     [HttpGet("{taskId}")]
     public Task<TestTaskDto> GetTaskById(
         [FromRoute] Guid taskId,
@@ -19,7 +19,6 @@ public class TasksController : ControllerBase
         CancellationToken ct = default)
         => handler.HandleAsync(taskId, HttpContext.GetJwtToken(), ct);
 
-    [Authorize(AuthenticationSchemes = "Bearer")]
     [HttpPost]
     public Task CreateTask(
         [FromBody] CreateTaskRequest request,
@@ -27,7 +26,6 @@ public class TasksController : ControllerBase
         CancellationToken ct = default)
         => handler.HandleAsync(request, HttpContext.GetJwtToken(), ct);
 
-    [Authorize(AuthenticationSchemes = "Bearer")]
     [HttpPut("{taskId}")]
     public Task UpdateTask(
         [FromBody, FromRoute] UpdateTaskRequest request,
@@ -35,7 +33,6 @@ public class TasksController : ControllerBase
         CancellationToken ct = default)
         => handler.HandleAsync(request, HttpContext.GetJwtToken(), ct);
 
-    [Authorize(AuthenticationSchemes = "Bearer")]
     [HttpDelete("{taskId}")]
     public Task DeleteTask(
         [FromRoute] Guid taskId,
@@ -43,7 +40,6 @@ public class TasksController : ControllerBase
         CancellationToken ct = default)
         => handler.HandleAsync(taskId, HttpContext.GetJwtToken(), ct);
 
-    [Authorize(AuthenticationSchemes = "Bearer")]
     [HttpPost("{taskId}")]
     public Task<TestTaskResultDto> PassTestTask(
         [FromBody, FromRoute] PassTestTaskRequest request,

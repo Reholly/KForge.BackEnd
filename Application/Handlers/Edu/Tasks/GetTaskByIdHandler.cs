@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
 using Application.DTO.Edu;
-using Application.Exceptions;
-using Application.Exceptions.Auth;
+using Application.Exceptions.Common;
 using Application.Mappers;
 using Application.Services.Auth.Interfaces;
 using Domain.Entities;

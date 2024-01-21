@@ -33,7 +33,7 @@ public class AuthController : ControllerBase
         => handler.HandleAsync(request, ct);
 
     [HttpGet("test")]
-    [Authorize(Roles = "Student", AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public List<string> TestEndpoint()
     {
         return new List<string>{"HAHAL", "HHA", "FSFAF"};
