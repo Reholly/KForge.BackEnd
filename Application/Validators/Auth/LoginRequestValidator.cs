@@ -1,9 +1,10 @@
+using Application.DTO.Auth;
 using Application.Requests.Auth;
 using FluentValidation;
 
 namespace Application.Validators.Auth;
 
-public class LoginRequestValidator : AbstractValidator<LoginRequest>
+public class LoginRequestValidator : AbstractValidator<LogInDto>
 {
     public LoginRequestValidator()
     {

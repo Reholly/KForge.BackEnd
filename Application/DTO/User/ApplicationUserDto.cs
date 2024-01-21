@@ -1,6 +1,6 @@
 namespace Application.Models;
 
-public record UserModel(
+public record ApplicationUserDto(
     string Name, 
     string Surname, 
     string Patronymic, 

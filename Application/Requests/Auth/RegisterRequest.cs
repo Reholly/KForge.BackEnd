@@ -3,5 +3,5 @@ using Application.Models;
 namespace Application.Requests.Auth;
 
 public record RegisterRequest(
-    UserModel UserModel, 
+    ApplicationUserDto ApplicationUserDto, 
     IdentityModel IdentityModel);

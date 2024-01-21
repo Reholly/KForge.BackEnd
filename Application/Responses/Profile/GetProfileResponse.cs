@@ -2,4 +2,4 @@ using Application.Models;
 
 namespace Application.Responses.Profile;
 
-public record GetProfileResponse(UserModel UserModel, bool IsOwner);
+public record GetProfileResponse(ApplicationUserDto ApplicationUserDto, bool IsOwner);

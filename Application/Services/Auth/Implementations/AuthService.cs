@@ -82,6 +82,8 @@ public class AuthService : IAuthService
     {
         var userByEmail = await _userManager.FindByEmailAsync(email);
         var userByUsername = await _userManager.FindByNameAsync(username);
+
+        await _roleManager.CreateAsync(new IdentityRole(role));
         
         if (userByEmail is not null)
             throw new ConflictException($"User with email: {email} already exists.");
@@ -107,8 +109,9 @@ public class AuthService : IAuthService
         
         await _emailService.SendEmailAsync(
             user.Email,
-            "Confirmation account",
-            $"Confirm your email: <a href='{callbackConfirmationUrl}'>link</a>");
+            "Подтверждение регистрации",
+            $"Для подтверждения регистрации перейдите оп ссылке: <a href='{callbackConfirmationUrl}'>link</a>." +
+            $" Если это были не вы, просим вас связаться с тех.поддержкой сайта.");
 
         var registeredUser = await _userManager.FindByEmailAsync(email);
                 

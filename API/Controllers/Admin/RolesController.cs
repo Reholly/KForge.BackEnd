@@ -20,23 +20,21 @@ public class RolesController : ControllerBase
     [HttpPost("/delete")]
     public Task DeleteRole(
         [FromServices] DeleteRoleHandler handler,
-        RoleDto dto,
+        [FromBody] RoleDto dto,
         CancellationToken ct = default)
         => handler.HandleAsync(dto, ct);
     
     [HttpPost("/add/mentor")]
     public Task AddMentorRole( 
         [FromServices] AddMentorHandler handler,
-        UsernameDto dto,
+        [FromBody] UsernameDto dto,
         CancellationToken ct = default)
         => handler.HandleAsync(dto, ct);
     
     [HttpPost("/delete/mentor")]
     public Task RemoveMentorRole(
         [FromServices] RemoveMentorHandler handler,
-        UsernameDto dto,
+        [FromBody] UsernameDto dto,
         CancellationToken ct = default)
         => handler.HandleAsync(dto, ct);
-    
-    
 }

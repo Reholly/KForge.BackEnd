@@ -1,3 +1,4 @@
+using Application.DTO.Security;
 using Application.Exceptions.Common;
 using Application.Requests.Auth;
 using Application.Services.Auth.Interfaces;
@@ -7,22 +8,22 @@ namespace Application.Handlers.Auth;
 
 public class ResetPasswordHandler(
     IPermissionService permissionService,
-    IValidator<ResetPasswordRequest> validator,
+    IValidator<ResetPasswordDto> validator,
     IAuthService authService,
     IJwtTokenService tokenService)
 {
     private readonly IAuthService _authService = authService;
-    private readonly IValidator<ResetPasswordRequest> _validator = validator;
+    private readonly IValidator<ResetPasswordDto> _validator = validator;
     private readonly IPermissionService _permissionService = permissionService;
     private readonly IJwtTokenService _tokenService = tokenService;
 
-    public async Task HandleAsync(ResetPasswordRequest request, string jwtToken, CancellationToken ct)
+    public async Task HandleAsync(ResetPasswordDto dto, string jwtToken, CancellationToken ct)
     {
-        await _validator.ValidateAndThrowAsync(request, ct);
+        await _validator.ValidateAndThrowAsync(dto, ct);
         
-        if (!_permissionService.IsProfileOwner(request.Username, _tokenService.ParseClaims(jwtToken)))
+        if (!_permissionService.IsProfileOwner(dto.Username, _tokenService.ParseClaims(jwtToken)))
             throw new PermissionDeniedException("Password reset failed: not an owner.");
 
-        await _authService.ResetPasswordAsync(request.Username, request.NewPassword);
+        await _authService.ResetPasswordAsync(dto.Username, dto.NewPassword);
     }
 }

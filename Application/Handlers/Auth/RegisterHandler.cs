@@ -9,16 +9,16 @@ namespace Application.Handlers.Auth;
 public class RegisterHandler(
     IAuthService authService, 
     IValidator<IdentityModel> identityValidator,
-    IValidator<UserModel> userValidator)
+    IValidator<ApplicationUserDto> userValidator)
 {
     private readonly IAuthService _authService = authService;
     private readonly IValidator<IdentityModel> _identityValidator = identityValidator;
-    private readonly IValidator<UserModel> _userValidator = userValidator;
+    private readonly IValidator<ApplicationUserDto> _userValidator = userValidator;
 
     public async Task HandleAsync(RegisterRequest request, CancellationToken ct = default)
     {
         await _identityValidator.ValidateAndThrowAsync(request.IdentityModel, ct);
-        await _userValidator.ValidateAndThrowAsync(request.UserModel, ct);
+        await _userValidator.ValidateAndThrowAsync(request.ApplicationUserDto, ct);
         
         await _authService.RegisterAsync(
             request.IdentityModel.Username, 
@@ -26,11 +26,11 @@ public class RegisterHandler(
             request.IdentityModel.Password, 
             new ApplicationUser
             {
-                BirthDate = request.UserModel.BirthDate,
-                Name = request.UserModel.Name,
+                BirthDate = request.ApplicationUserDto.BirthDate,
+                Name = request.ApplicationUserDto.Name,
                 Username = request.IdentityModel.Username,
-                Surname = request.UserModel.Surname,
-                Patronymic = request.UserModel.Patronymic,
+                Surname = request.ApplicationUserDto.Surname,
+                Patronymic = request.ApplicationUserDto.Patronymic,
             });
     }
 }

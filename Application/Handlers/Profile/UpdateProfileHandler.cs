@@ -35,10 +35,10 @@ public class UpdateProfileHandler
         
         var user = await _userRepository.GetByUsernameAsync(usernameFromRoute, ct);
         
-        user.Name = request.UserModel.Name;
-        user.Patronymic = request.UserModel.Patronymic;
-        user.Surname = request.UserModel.Surname;
-        user.BirthDate = request.UserModel.BirthDate;
+        user.Name = request.ApplicationUserDto.Name;
+        user.Patronymic = request.ApplicationUserDto.Patronymic;
+        user.Surname = request.ApplicationUserDto.Surname;
+        user.BirthDate = request.ApplicationUserDto.BirthDate;
 
         await _userRepository.UpdateUserAsync(user, ct);
         await _userRepository.CommitAsync(ct);

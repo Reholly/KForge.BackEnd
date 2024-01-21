@@ -32,7 +32,7 @@ public class GetProfileHandler
         
         var user = await _userRepository.GetByUsernameAsync(username!, ct);
 
-        var userDto = new UserModel(user.Name, user.Surname, user.Patronymic, user.BirthDate);
+        var userDto = new ApplicationUserDto(user.Name, user.Surname, user.Patronymic, user.BirthDate);
 
         return new GetProfileResponse(userDto, isOwner);
     }

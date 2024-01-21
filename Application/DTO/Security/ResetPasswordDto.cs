@@ -1,6 +1,6 @@
-namespace Application.Requests.Auth;
+namespace Application.DTO.Security;
 
-public record ResetPasswordRequest(
+public record ResetPasswordDto(
     string Username,
     string OldPassword, 
     string NewPassword,

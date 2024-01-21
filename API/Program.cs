@@ -29,6 +29,7 @@ builder.Services.AddMappers();
 builder.Services.AddApplicationServices();
 builder.Services.AddHandlers();
 builder.Services.AddValidators();
+builder.Services.AddApplicationOptions(config);
 
 builder.Services.AddJwtAuthentication(config);
 builder.Services.AddAuthorization();

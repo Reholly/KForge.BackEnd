@@ -1,3 +1,4 @@
+using Application.DTO.Auth;
 using Application.Requests.Auth;
 using Application.Responses.Auth;
 using Application.Services.Auth.Interfaces;
@@ -8,14 +9,14 @@ namespace Application.Handlers.Auth;
 
 public class LoginHandler(
     IAuthService authService,
-    IValidator<LoginRequest> validator,
+    IValidator<LogInDto> validator,
     IMemoryCache refreshTokensCache)
 {
     private readonly IAuthService _authService = authService;
-    private readonly IValidator<LoginRequest> _validator = validator;
+    private readonly IValidator<LogInDto> _validator = validator;
     private readonly IMemoryCache _refreshTokensCache = refreshTokensCache;
 
-    public async Task<LoginResponse> HandleAsync(LoginRequest request, CancellationToken ct = default)
+    public async Task<LoginResponse> HandleAsync(LogInDto request, CancellationToken ct = default)
     {
         await _validator.ValidateAndThrowAsync(request, ct);
         

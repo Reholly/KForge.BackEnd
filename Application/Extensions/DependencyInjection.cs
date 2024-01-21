@@ -1,5 +1,4 @@
-using Application.Configuration.Options;
-using Application.Configuration.Setups;
+using Application.DTO.Auth;
 using Application.DTO.Edu;
 using Application.Handlers.Admin;
 using Application.Handlers.Auth;
@@ -8,6 +7,7 @@ using Application.Handlers.Profile;
 using Application.Mappers;
 using Application.Mappers.Edu;
 using Application.Models;
+using Application.Options;
 using Application.Services.Admin.Implementations;
 using Application.Services.Admin.Interfaces;
 using Application.Services.Auth.Implementations;
@@ -22,7 +22,6 @@ using Domain.Entities;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using LoginRequest = Application.Requests.Auth.LoginRequest;
 
 namespace Application.Extensions;
 
@@ -43,6 +42,7 @@ public static class DependencyInjection
         collection.AddScoped<LoginHandler>();
         collection.AddScoped<RegisterHandler>();
         collection.AddScoped<RefreshTokenHandler>();
+        collection.AddScoped<EmailConfirmHandler>();
         
         collection.AddScoped<GetProfileHandler>();
         collection.AddScoped<UpdateProfileHandler>();
@@ -61,9 +61,9 @@ public static class DependencyInjection
 
     public static void AddValidators(this IServiceCollection collection)
     {
-        collection.AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
+        collection.AddScoped<IValidator<LogInDto>, LoginRequestValidator>();
         collection.AddScoped<IValidator<IdentityModel>, IdentityModelValidator>();
-        collection.AddScoped<IValidator<UserModel>, UserModelValidator>();
+        collection.AddScoped<IValidator<ApplicationUserDto>, UserModelValidator>();
     }
 
     public static void AddMappers(this IServiceCollection collection)
@@ -72,11 +72,10 @@ public static class DependencyInjection
         collection.AddScoped<IMapper<TestTaskResult, TestTaskResultDto>, TestTaskResultMapper>();
     }
 
-    public static void AddOptions(this IServiceCollection collection, IConfiguration configuration)
+    public static void AddApplicationOptions(this IServiceCollection collection, IConfiguration configuration)
     {
-        collection.ConfigureOptions<JwtOptionsSetup>();
-        collection.ConfigureOptions<AuthOptionsSetup>();
-        collection.ConfigureOptions<EmailOptionsSetup>();
-        
+        collection.AddOptions<EmailOptions>().BindConfiguration(EmailOptions.Section);
+        collection.AddOptions<JwtOptions>().BindConfiguration(JwtOptions.Section);
+        collection.AddOptions<AuthOptions>().BindConfiguration(AuthOptions.Section);
     }
 }

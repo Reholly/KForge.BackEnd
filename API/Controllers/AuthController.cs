@@ -1,4 +1,6 @@
 using API.Extensions;
+using Application.DTO.Auth;
+using Application.DTO.Security;
 using Application.Handlers.Auth;
 using Application.Requests.Auth;
 using Application.Responses.Auth;
@@ -20,17 +22,17 @@ public class AuthController : ControllerBase
     
     [HttpPost("login")]
     public Task<LoginResponse> Login(
-        [FromBody] LoginRequest request,
+        [FromBody] LogInDto request,
         [FromServices] LoginHandler handler,
         CancellationToken ct = default)
         => handler.HandleAsync(request, ct);
     
     [HttpPost("refresh")]
     public Task<RefreshTokenResponse> Refresh(
-        [FromBody] RefreshTokenRequest request,
+        [FromBody] RefreshTokenDto dto,
         [FromServices] RefreshTokenHandler handler,
         CancellationToken ct = default)
-        => handler.HandleAsync(request, ct);
+        => handler.HandleAsync(dto, ct);
 
     [HttpGet("test")]
     [Authorize(AuthenticationSchemes = "Bearer")]
@@ -49,8 +51,8 @@ public class AuthController : ControllerBase
     
     [HttpPost("reset")]
     public Task ResetPassword(
-        [FromBody] ResetPasswordRequest request,
+        [FromBody] ResetPasswordDto dto,
         [FromServices] ResetPasswordHandler handler,
         CancellationToken ct = default)
-        => handler.HandleAsync(request, HttpContext.GetJwtToken(), ct);
+        => handler.HandleAsync(dto, HttpContext.GetJwtToken(), ct);
 }
