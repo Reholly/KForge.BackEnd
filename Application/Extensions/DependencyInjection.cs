@@ -1,3 +1,5 @@
+using Application.Configuration.Options;
+using Application.Configuration.Setups;
 using Application.DTO.Edu;
 using Application.Handlers.Admin;
 using Application.Handlers.Auth;
@@ -18,6 +20,7 @@ using Application.Validators.Auth;
 using Application.Validators.ModelValidators;
 using Domain.Entities;
 using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LoginRequest = Application.Requests.Auth.LoginRequest;
 
@@ -67,5 +70,13 @@ public static class DependencyInjection
     {
         collection.AddScoped<IMapper<TestTask, TestTaskDto>, TestTaskMapper>();
         collection.AddScoped<IMapper<TestTaskResult, TestTaskResultDto>, TestTaskResultMapper>();
+    }
+
+    public static void AddOptions(this IServiceCollection collection, IConfiguration configuration)
+    {
+        collection.ConfigureOptions<JwtOptionsSetup>();
+        collection.ConfigureOptions<AuthOptionsSetup>();
+        collection.ConfigureOptions<EmailOptionsSetup>();
+        
     }
 }
