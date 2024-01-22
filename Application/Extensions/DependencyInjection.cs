@@ -1,5 +1,6 @@
 using Application.DTO.Auth;
 using Application.DTO.Edu;
+using Application.DTO.Security;
 using Application.Handlers.Admin;
 using Application.Handlers.Auth;
 using Application.Handlers.Edu.Tasks;
@@ -48,6 +49,7 @@ public static class DependencyInjection
         collection.AddScoped<RegisterHandler>();
         collection.AddScoped<RefreshTokenHandler>();
         collection.AddScoped<EmailConfirmHandler>();
+        collection.AddScoped<ResetPasswordHandler>();
         
         collection.AddScoped<GetProfileHandler>();
         collection.AddScoped<UpdateProfileHandler>();
@@ -70,6 +72,7 @@ public static class DependencyInjection
         collection.AddScoped<IValidator<IdentityUserDto>, IdentityUserDtoValidator>();
         collection.AddScoped<IValidator<ApplicationUserDto>, ApplicationUserDtoValidator>();
         collection.AddScoped<IValidator<GetProfileRequest>, GetProfileRequestValidator>();
+        collection.AddScoped<IValidator<ResetPasswordDto>, ResetPasswordDtoValidator>();
     }
 
     public static void AddMappers(this IServiceCollection collection)

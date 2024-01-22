@@ -21,7 +21,7 @@ public class ResetPasswordHandler(
     {
         await _validator.ValidateAndThrowAsync(request.ResetPasswordDto, ct);
         
-        if (!_permissionService.IsProfileOwner(request.ResetPasswordDto.Username, _tokenService.ParseClaims(jwtToken)))
+        if (!_permissionService.IsProfileOwner(request.ResetPasswordDto.Username, jwtToken))
             throw new PermissionDeniedException("Password reset failed: not an owner.");
 
         await _securityService.ResetPasswordAsync(request.ResetPasswordDto);
