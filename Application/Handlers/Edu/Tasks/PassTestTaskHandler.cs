@@ -3,22 +3,23 @@ using Application.DTO.Edu;
 using Application.Exceptions.Common;
 using Application.Mappers;
 using Application.Requests.Education.Tasks;
+using Application.Responses.Education.Tasks;
 using Application.Services.Auth.Interfaces;
 using Application.Services.Edu.Interfaces;
 using Domain.Entities;
-using Domain.Interfaces.Repositories;
+using Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Edu.Tasks;
 
 public class PassTestTaskHandler(
     IJwtTokenService jwtTokenService,
-    IUserRepository userRepository,
-    ITestTaskRepository testTaskRepository,
     IPermissionService permissionService,
     ITestTaskService testTaskService,
-    IMapper<TestTaskResult, TestTaskResultDto> testTaskResultMapper)
+    IMapper<TestTaskResult, TestTaskResultDto> testTaskResultMapper,
+    ApplicationDbContext context)
 {
-    public async Task<TestTaskResultDto> HandleAsync(PassTestTaskRequest request, string jwtToken, 
+    public async Task<PassTestTaskResponse> HandleAsync(PassTestTaskRequest request, string jwtToken, 
         CancellationToken ct = default)
     {
         var tokenClaims = jwtTokenService.ParseClaims(jwtToken);
@@ -29,10 +30,15 @@ public class PassTestTaskHandler(
         }
 
         string username = usernameClaim.Value;
-        var user = await userRepository.GetByUsernameWithCoursesAsync(username, ct);
+        var user = await context.Profiles
+            .Include(au => au.CoursesAsMentor)
+            .Include(au => au.CoursesAsStudent)
+            .FirstOrDefaultAsync(au => au.Username == username, ct);
         NotFoundException.ThrowIfNull(user, nameof(user));
 
-        var testTask = await testTaskRepository.GetTaskByIdAsync(request.TaskId, ct);
+        var testTask = await context.TestTasks
+            .Include(testTask => testTask.Course)
+            .FirstOrDefaultAsync(tt => tt.Id == request.TaskId, ct);
         NotFoundException.ThrowIfNull(testTask, nameof(testTask));
 
         if (tokenClaims.FirstOrDefault(c => 
@@ -40,7 +46,10 @@ public class PassTestTaskHandler(
         {
             var result1 = await testTaskService
                 .PassTestTaskAsync(testTask!, request.AnsweredQuestions, user!, ct);
-            return testTaskResultMapper.Map(result1);
+            return new PassTestTaskResponse
+            {
+                Result = testTaskResultMapper.Map(result1)
+            };
         }
 
         if (!permissionService.IsInCourse(user!, testTask!.CourseId))
@@ -51,6 +60,9 @@ public class PassTestTaskHandler(
         
         var result = await testTaskService
             .PassTestTaskAsync(testTask, request.AnsweredQuestions, user!, ct);
-        return testTaskResultMapper.Map(result);
+        return new PassTestTaskResponse
+        {
+            Result = testTaskResultMapper.Map(result)
+        };
     }
 }

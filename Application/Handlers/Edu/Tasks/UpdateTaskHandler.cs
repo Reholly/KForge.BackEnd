@@ -5,16 +5,16 @@ using Application.Mappers;
 using Application.Requests.Education.Tasks;
 using Application.Services.Auth.Interfaces;
 using Domain.Entities;
-using Domain.Interfaces.Repositories;
+using Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Edu.Tasks;
 
 public class UpdateTaskHandler(
     IJwtTokenService jwtTokenService,
-    IUserRepository userRepository,
-    ITestTaskRepository testTaskRepository,
     IPermissionService permissionService,
-    IMapper<TestTask, TestTaskDto> testTaskMapper)
+    IMapper<TestTask, TestTaskDto> testTaskMapper,
+    ApplicationDbContext context)
 {
     public async Task HandleAsync(UpdateTaskRequest request, string jwtToken, 
         CancellationToken ct = default)
@@ -27,10 +27,15 @@ public class UpdateTaskHandler(
         }
 
         string username = usernameClaim.Value;
-        var user = await userRepository.GetByUsernameWithCoursesAsync(username, ct);
+        var user = await context.Profiles
+            .Include(au => au.CoursesAsMentor)
+            .Include(au => au.CoursesAsStudent)
+            .FirstOrDefaultAsync(au => au.Username == username, ct);
         NotFoundException.ThrowIfNull(user, nameof(user));
 
-        var testTask = await testTaskRepository.GetTaskByIdAsync(request.TaskId, ct);
+        var testTask = await context.TestTasks
+            .Include(testTask => testTask.Course)
+            .FirstOrDefaultAsync(tt => tt.Id == request.TaskId, ct);
         NotFoundException.ThrowIfNull(testTask, nameof(testTask));
 
         if (!permissionService.IsCourseMentor(user!, testTask!.CourseId) 
@@ -43,7 +48,7 @@ public class UpdateTaskHandler(
 
         testTask = testTaskMapper.MapReverse(testTask, request.TaskDto);
         
-        await testTaskRepository.UpdateTaskAsync(testTask, ct);
-        await testTaskRepository.CommitChangesAsync(ct);
+        await Task.Run(() => context.TestTasks.Update(testTask), ct);
+        await context.SaveChangesAsync(ct);
     }
 }

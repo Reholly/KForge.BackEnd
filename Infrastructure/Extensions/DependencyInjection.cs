@@ -1,7 +1,5 @@
-using Domain.Interfaces.Repositories;
 using Infrastructure.Contexts;
 using Infrastructure.Contexts.Interceptors;
-using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,13 +18,5 @@ public static class DependencyInjection
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
                 .AddInterceptors(updateAuditableEntitiesInterceptor);
         });
-    }
-
-    public static void AddRepositories(this IServiceCollection collection)
-    {
-        collection.AddScoped<IUserRepository, UserRepository>();
-        collection.AddScoped<ITestTaskRepository, TestTaskRepository>();
-        collection.AddScoped<ICourseRepository, CourseRepository>();
-        collection.AddScoped<ITestTaskResultRepository, TestTaskResultRepository>();
     }
 }

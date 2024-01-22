@@ -2,20 +2,21 @@
 using Application.DTO.Edu;
 using Application.Exceptions.Common;
 using Application.Mappers;
+using Application.Responses.Education.Tasks;
 using Application.Services.Auth.Interfaces;
 using Domain.Entities;
-using Domain.Interfaces.Repositories;
+using Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Edu.Tasks;
 
 public class GetTaskByIdHandler(
     IJwtTokenService jwtTokenService,
-    IUserRepository userRepository,
-    ITestTaskRepository testTaskRepository,
     IPermissionService permissionService,
-    IMapper<TestTask, TestTaskDto> testTaskMapper)
+    IMapper<TestTask, TestTaskDto> testTaskMapper,
+    ApplicationDbContext context)
 {
-    public async Task<TestTaskDto> HandleAsync(Guid taskId, string jwtToken,
+    public async Task<GetTaskByIdResponse> HandleAsync(Guid taskId, string jwtToken,
         CancellationToken ct = default)
     {
         var tokenClaims = jwtTokenService.ParseClaims(jwtToken);
@@ -26,16 +27,24 @@ public class GetTaskByIdHandler(
         }
 
         string username = usernameClaim.Value;
-        var user = await userRepository.GetByUsernameWithCoursesAsync(username, ct);
+        var user = await context.Profiles
+            .Include(au => au.CoursesAsMentor)
+            .Include(au => au.CoursesAsStudent)
+            .FirstOrDefaultAsync(au => au.Username == username, ct);
         NotFoundException.ThrowIfNull(user, nameof(user));
 
-        var testTask = await testTaskRepository.GetTaskByIdAsync(taskId, ct);
+        var testTask = await context.TestTasks
+            .Include(testTask => testTask.Course)
+            .FirstOrDefaultAsync(tt => tt.Id == taskId, ct);
         NotFoundException.ThrowIfNull(testTask, nameof(testTask));
 
         if (tokenClaims.FirstOrDefault(c => 
                 c is { Type: ClaimTypes.Role, Value: "Admin" }) is not null)
         {
-            return testTaskMapper.Map(testTask!);
+            return new GetTaskByIdResponse
+            {
+                TestTask = testTaskMapper.Map(testTask!)
+            };
         }
 
         if (!permissionService.IsInCourse(user!, testTask!.CourseId))
@@ -44,6 +53,9 @@ public class GetTaskByIdHandler(
                                                 $"is not in course {testTask.Course!.Title}");
         }
         
-        return testTaskMapper.Map(testTask);
+        return new GetTaskByIdResponse
+        {
+            TestTask = testTaskMapper.Map(testTask)
+        };
     }
 }

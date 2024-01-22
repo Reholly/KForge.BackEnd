@@ -2,6 +2,7 @@
 using Application.DTO.Edu;
 using Application.Handlers.Edu.Tasks;
 using Application.Requests.Education.Tasks;
+using Application.Responses.Education.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ namespace API.Controllers;
 public class TasksController : ControllerBase
 {
     [HttpGet("{taskId}")]
-    public Task<TestTaskDto> GetTaskById(
+    public Task<GetTaskByIdResponse> GetTaskById(
         [FromRoute] Guid taskId,
         [FromServices] GetTaskByIdHandler handler,
         CancellationToken ct = default)
@@ -28,10 +29,11 @@ public class TasksController : ControllerBase
 
     [HttpPut("{taskId}")]
     public Task UpdateTask(
-        [FromBody, FromRoute] UpdateTaskRequest request,
+        [FromRoute] Guid taskId,
+        [FromBody] UpdateTaskRequest request,
         [FromServices] UpdateTaskHandler handler,
         CancellationToken ct = default)
-        => handler.HandleAsync(request, HttpContext.GetJwtToken(), ct);
+        => handler.HandleAsync(request with { TaskId = taskId }, HttpContext.GetJwtToken(), ct);
 
     [HttpDelete("{taskId}")]
     public Task DeleteTask(
@@ -41,9 +43,10 @@ public class TasksController : ControllerBase
         => handler.HandleAsync(taskId, HttpContext.GetJwtToken(), ct);
 
     [HttpPost("{taskId}")]
-    public Task<TestTaskResultDto> PassTestTask(
-        [FromBody, FromRoute] PassTestTaskRequest request,
+    public Task<PassTestTaskResponse> PassTestTask(
+        [FromRoute] Guid taskId,
+        [FromBody] PassTestTaskRequest request,
         [FromServices] PassTestTaskHandler handler,
         CancellationToken ct = default)
-        => handler.HandleAsync(request, HttpContext.GetJwtToken(), ct);
+        => handler.HandleAsync(request with { TaskId = taskId }, HttpContext.GetJwtToken(), ct);
 }

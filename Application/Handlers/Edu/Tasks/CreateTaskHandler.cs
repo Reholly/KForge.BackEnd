@@ -4,16 +4,16 @@ using Application.Models;
 using Application.Requests.Education.Tasks;
 using Application.Services.Auth.Interfaces;
 using Application.Services.Edu.Interfaces;
-using Domain.Interfaces.Repositories;
+using Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Edu.Tasks;
 
 public class CreateTaskHandler(
     IJwtTokenService jwtTokenService,
-    IUserRepository userRepository,
     IPermissionService permissionService,
-    ICourseRepository courseRepository,
-    ITestTaskService testTaskService)
+    ITestTaskService testTaskService,
+    ApplicationDbContext context)
 {
     public async Task HandleAsync(CreateTaskRequest request, string jwtToken, CancellationToken ct = default)
     {
@@ -25,7 +25,10 @@ public class CreateTaskHandler(
         }
 
         string username = usernameClaim.Value;
-        var user = await userRepository.GetByUsernameWithCoursesAsync(username, ct);
+        var user = await context.Profiles
+            .Include(au => au.CoursesAsMentor)
+            .Include(au => au.CoursesAsStudent)
+            .FirstOrDefaultAsync(au => au.Username == username, ct);
         NotFoundException.ThrowIfNull(user, nameof(user));
         
         if (!permissionService.IsCourseMentor(user!, request.CourseId) 
@@ -36,7 +39,8 @@ public class CreateTaskHandler(
                                                 "and admins can create new tasks");
         }
 
-        var course = await courseRepository.GetCourseByIdAsync(request.CourseId, ct);
+        var course = await context.Courses
+            .FirstOrDefaultAsync(c => c.Id == request.CourseId, ct);
         NotFoundException.ThrowIfNull(course, nameof(course));
 
         await testTaskService.CreateTestTaskAsync(new CreateTestTaskModel
