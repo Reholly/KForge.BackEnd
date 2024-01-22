@@ -4,48 +4,44 @@ using Application.Models;
 using Application.Requests.Auth;
 using Application.Responses.Auth;
 using Application.Services.Auth.Interfaces;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
-
 namespace Application.Handlers.Auth;
 
 public class RefreshTokenHandler(
     IJwtTokenService tokenService, 
-    IMemoryCache refreshTokensCache)
+    IJwtTokenStorage storage)
 {
     private readonly IJwtTokenService _tokenService = tokenService;
-    private readonly IMemoryCache _refreshTokensCache = refreshTokensCache;
+    private readonly IJwtTokenStorage _storage = storage;
 
-    public async Task<RefreshTokenResponse> HandleAsync(RefreshTokenDto dto, CancellationToken ct = default)
+    public async Task<RefreshTokenResponse> HandleAsync(RefreshTokenRequest request, CancellationToken ct = default)
     {
-        _refreshTokensCache.TryGetValue(dto.RefreshToken, out string? oldUsername);
+        _storage.TryGetValue(request.RefreshTokenDto.RefreshToken, out string? oldUsername);
 
         if (oldUsername is null)
             throw new UnauthorizedException("Refresh token is expired or invalid.");
 
-        bool isValid = await _tokenService.IsJwtTokenValidAsync(dto.ExpiredAccessToken, false);
+        bool isValid = await _tokenService.IsJwtTokenValidAsync(request.RefreshTokenDto.ExpiredAccessToken, false);
         
         if (!isValid)
-            throw new UnauthorizedException("Expired access token is invalid by Key. ");
+            throw new UnauthorizedException("Expired access token is invalid.");
         
-        var refreshTokenClaims = _tokenService.ParseClaims(dto.RefreshToken);
+        var refreshTokenClaims = _tokenService.ParseClaims(request.RefreshTokenDto.RefreshToken);
         
         var username = refreshTokenClaims.First(x => x.Type == ClaimTypes.UserData).Value.ToString();
 
         if (username != oldUsername)
             throw new UnauthorizedException("Refresh token is invalid. No matches access with refresh tokens.");
         
-        var newRefreshToken = _tokenService.GenerateRefreshToken([new Claim(ClaimTypes.UserData, username)]);
-        var newAccessToken = _tokenService.GenerateAccessToken(_tokenService.ParseClaims(dto.ExpiredAccessToken));
+        var newRefreshToken = _tokenService.GenerateRefreshToken(
+            refreshTokenClaims);
+        var newAccessToken = _tokenService.GenerateAccessToken(
+            _tokenService.ParseClaims(request.RefreshTokenDto.ExpiredAccessToken));
 
-        _refreshTokensCache.Set(newRefreshToken, username);
-        _refreshTokensCache.Remove(dto.RefreshToken);
+        _storage.Set(username, newRefreshToken);
+        _storage.Remove(request.RefreshTokenDto.RefreshToken);
 
         var authTokens = new AuthTokensModel(newRefreshToken, newAccessToken);
-        
-        return new RefreshTokenResponse
-        {
-            AuthTokensModel = authTokens
-        };
+
+        return new RefreshTokenResponse(authTokens);
     }
 }

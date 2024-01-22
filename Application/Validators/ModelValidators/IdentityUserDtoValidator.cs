@@ -1,18 +1,18 @@
 using Application.DTO.Auth;
-using Application.Models;
 using FluentValidation;
 
 namespace Application.Validators.ModelValidators;
 
-public class IdentityModelValidator : AbstractValidator<IdentityUserDto>
+public class IdentityUserDtoValidator : AbstractValidator<IdentityUserDto>
 {
-    public IdentityModelValidator()
+    public IdentityUserDtoValidator()
     {
         RuleFor(x => x.Email)
             .EmailAddress()
             .NotEmpty()
             .NotNull()
             .MaximumLength(100);
+        
         RuleFor(x => x.Username)
             .NotEmpty()
             .NotNull()
@@ -24,5 +24,12 @@ public class IdentityModelValidator : AbstractValidator<IdentityUserDto>
             .NotNull()
             .MinimumLength(5)   
             .MaximumLength(100);
+        
+        RuleFor(x => x.RepeatedPassword)
+            .NotEmpty()
+            .NotNull()
+            .MinimumLength(5)   
+            .MaximumLength(100)
+            .Equal(x => x.Password);
     }
 }

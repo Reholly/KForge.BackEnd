@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Application.Validators.Auth;
 
-public class ResetPasswordRequestValidator : AbstractValidator<ResetPasswordDto>
+public class ResetPasswordDtoValidator : AbstractValidator<ResetPasswordDto>
 {
-    public ResetPasswordRequestValidator()
+    public ResetPasswordDtoValidator()
     { 
         RuleFor(x => x.Username)
             .NotEmpty()

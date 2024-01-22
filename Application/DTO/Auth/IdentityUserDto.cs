@@ -3,4 +3,5 @@ namespace Application.DTO.Auth;
 public record IdentityUserDto(
     string Username, 
     string Email, 
-    string Password);
+    string Password,
+    string RepeatedPassword);

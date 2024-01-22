@@ -1,11 +1,11 @@
 using API.Extensions;
 using Application.DTO.Auth;
-using Application.DTO.Security;
 using Application.Handlers.Auth;
 using Application.Requests.Auth;
 using Application.Responses.Auth;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RegisterRequest = Application.Requests.Auth.RegisterRequest;
+using ResetPasswordRequest = Application.Requests.Auth.ResetPasswordRequest;
 
 namespace API.Controllers;
 
@@ -22,36 +22,29 @@ public class AuthController : ControllerBase
     
     [HttpPost("login")]
     public Task<LoginResponse> Login(
-        [FromBody] LogInDto request,
-        [FromServices] LoginHandler handler,
+        [FromBody] LogInRequest request,
+        [FromServices] LogInHandler handler,
         CancellationToken ct = default)
         => handler.HandleAsync(request, ct);
     
     [HttpPost("refresh")]
     public Task<RefreshTokenResponse> Refresh(
-        [FromBody] RefreshTokenDto dto,
+        [FromBody] RefreshTokenRequest request,
         [FromServices] RefreshTokenHandler handler,
         CancellationToken ct = default)
-        => handler.HandleAsync(dto, ct);
-
-    [HttpGet("test")]
-    [Authorize(AuthenticationSchemes = "Bearer")]
-    public List<string> TestEndpoint()
-    {
-        return new List<string>{"HAHAL", "HHA", "FSFAF"};
-    }
-
+        => handler.HandleAsync(request, ct);
+    
     [HttpGet("confirm")]
     public Task ConfirmEmail(
-        [FromQuery, FromRoute] ConfirmEmailDto dto, 
+        [FromQuery] ConfirmEmailDto dto, 
         [FromServices] EmailConfirmHandler handler,
         CancellationToken ct = default)
-        => handler.HandleAsync(dto.Username, dto.Code, ct);
+        => handler.HandleAsync(dto, ct);
     
     [HttpPost("reset")]
     public Task ResetPassword(
-        [FromBody] ResetPasswordDto dto,
+        [FromBody] ResetPasswordRequest request,
         [FromServices] ResetPasswordHandler handler,
         CancellationToken ct = default)
-        => handler.HandleAsync(dto, HttpContext.GetJwtToken(), ct);
+        => handler.HandleAsync(request, HttpContext.GetJwtToken(), ct);
 }

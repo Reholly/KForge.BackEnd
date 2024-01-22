@@ -1,18 +1,14 @@
+using Application.DTO.Auth;
 using Application.Services.Auth.Interfaces;
 
 namespace Application.Handlers.Auth;
 
-public class EmailConfirmHandler
+public class EmailConfirmHandler(IRegistrationService registrationService)
 {
-    private readonly IAuthService _authService;
+    private readonly IRegistrationService _registrationService = registrationService;
 
-    public EmailConfirmHandler(IAuthService authService)
+    public async Task HandleAsync(ConfirmEmailDto dto, CancellationToken ct = default)
     {
-        _authService = authService;
-    }
-
-    public async Task HandleAsync(string username, string code, CancellationToken ct = default)
-    {
-        await _authService.ConfirmEmailAsync(username, code);
+        await _registrationService.ConfirmEmailAsync(dto);
     }
 }

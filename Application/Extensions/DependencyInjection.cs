@@ -8,6 +8,7 @@ using Application.Mappers;
 using Application.Mappers.Edu;
 using Application.Models;
 using Application.Options;
+using Application.Requests.Profile;
 using Application.Services.Admin.Implementations;
 using Application.Services.Admin.Interfaces;
 using Application.Services.Auth.Implementations;
@@ -31,15 +32,19 @@ public static class DependencyInjection
     {
         collection.AddScoped<IJwtTokenService, JwtTokenService>();
         collection.AddScoped<IEmailService, EmailService>();
-        collection.AddScoped<IAuthService, AuthService>();
         collection.AddScoped<IPermissionService, PermissionService>();
         collection.AddScoped<ITestTaskService, TestTaskService>();
         collection.AddScoped<IRoleService, RoleService>();
+
+        collection.AddScoped<ISecurityService, SecurityService>();
+        collection.AddScoped<ILogInService, LogInService>();
+        collection.AddScoped<IRegistrationService, RegistrationService>();
+        collection.AddSingleton<IJwtTokenStorage, JwtTokenStorage>();
     }
 
     public static void AddHandlers(this IServiceCollection collection)
     {
-        collection.AddScoped<LoginHandler>();
+        collection.AddScoped<LogInHandler>();
         collection.AddScoped<RegisterHandler>();
         collection.AddScoped<RefreshTokenHandler>();
         collection.AddScoped<EmailConfirmHandler>();
@@ -61,9 +66,10 @@ public static class DependencyInjection
 
     public static void AddValidators(this IServiceCollection collection)
     {
-        collection.AddScoped<IValidator<LogInDto>, LoginRequestValidator>();
-        collection.AddScoped<IValidator<IdentityUserDto>, IdentityModelValidator>();
-        collection.AddScoped<IValidator<ApplicationUserDto>, UserModelValidator>();
+        collection.AddScoped<IValidator<LogInDto>, LogInDtoValidator>();
+        collection.AddScoped<IValidator<IdentityUserDto>, IdentityUserDtoValidator>();
+        collection.AddScoped<IValidator<ApplicationUserDto>, ApplicationUserDtoValidator>();
+        collection.AddScoped<IValidator<GetProfileRequest>, GetProfileRequestValidator>();
     }
 
     public static void AddMappers(this IServiceCollection collection)

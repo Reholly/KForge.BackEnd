@@ -4,6 +4,7 @@ namespace Application.Services.Admin.Interfaces;
 
 public interface IRoleService
 {
+    Task AttachDefaultRolesAsync(string username);
     Task AttachRoleAsync(string role, string username);
     Task AttachRoleAsync(string role, IdentityUser user);
 

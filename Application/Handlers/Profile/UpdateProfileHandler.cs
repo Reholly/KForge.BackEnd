@@ -22,18 +22,17 @@ public class UpdateProfileHandler
     }
 
     public async Task HandleAsync(
-        UpdateProfileRequest request, 
-        string usernameFromRoute,
+        UpdateProfileRequest request,
         string jwtToken,
         CancellationToken ct = default)
     {
         var claims = _jwtTokenService.ParseClaims(jwtToken);
 
         
-        if (!_permissionService.IsProfileOwner(usernameFromRoute, claims))
+        if (!_permissionService.IsProfileOwner(request.ProfileUsername, claims))
             throw new PermissionDeniedException("Not profile owner.");
         
-        var user = await _userRepository.GetByUsernameAsync(usernameFromRoute, ct);
+        var user = await _userRepository.GetByUsernameAsync(request.ProfileUsername, ct);
         
         user.Name = request.ApplicationUserDto.Name;
         user.Patronymic = request.ApplicationUserDto.Patronymic;

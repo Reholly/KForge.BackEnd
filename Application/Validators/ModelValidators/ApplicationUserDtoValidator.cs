@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Application.Validators.ModelValidators;
 
-public class UserModelValidator : AbstractValidator<ApplicationUserDto>
+public class ApplicationUserDtoValidator : AbstractValidator<ApplicationUserDto>
 {
-    public UserModelValidator()
+    public ApplicationUserDtoValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty()

@@ -7,23 +7,22 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[Authorize]
+[Authorize(AuthenticationSchemes = "Bearer")]
 [ApiController]
 [Route("/api/profile")]
 public class UserProfileController : ControllerBase
 {
-    [HttpGet("{username}")]
+    [HttpGet]
     public Task<GetProfileResponse> GetProfile(
-        [FromRoute] string username,
+        [FromQuery] GetProfileRequest request,
         [FromServices] GetProfileHandler handler,
         CancellationToken ct = default)
-        => handler.HandleAsync(username, HttpContext.GetJwtToken(),ct);
+        => handler.HandleAsync(request, HttpContext.GetJwtToken(),ct);
     
-    [HttpPost("{username}")]
+    [HttpPost]
     public Task UpdateProfile(
-        [FromRoute] string username,
         [FromBody] UpdateProfileRequest request,
         [FromServices] UpdateProfileHandler handler,
         CancellationToken ct = default)
-        => handler.HandleAsync(request, username, HttpContext.GetJwtToken(), ct);
+        => handler.HandleAsync(request, HttpContext.GetJwtToken(), ct);
 }

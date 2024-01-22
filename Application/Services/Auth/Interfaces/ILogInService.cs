@@ -3,7 +3,7 @@ using Application.Models;
 
 namespace Application.Services.Auth.Interfaces;
 
-public interface ILoginService
+public interface ILogInService
 {
     Task<AuthTokensModel> LogInAsync(LogInDto dto);
 }

@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Application.Services.Auth.Implementations;
 
-public class LoginService(
+public class LogInService(
     SignInManager<IdentityUser> signInManager,
     UserManager<IdentityUser> userManager,
     IJwtTokenService tokenService) 
-    : ILoginService
+    : ILogInService
 {
     private readonly SignInManager<IdentityUser> _signInManager = signInManager;
     private readonly UserManager<IdentityUser> _userManager = userManager;
