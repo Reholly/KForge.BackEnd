@@ -48,7 +48,13 @@ public class JwtTokenService(IOptions<JwtOptions> options)
         }
     }
 
- 
+    public string GetUsernameFromAccessToken(string jwtToken)
+    {
+        var tokenClaims = ParseClaims(jwtToken);
+        return tokenClaims.First(c => c.Type == ClaimTypes.UserData).Value;
+    }
+
+
     public Claim[] ParseClaims(string jwtToken)
     {
         return new JwtSecurityTokenHandler()

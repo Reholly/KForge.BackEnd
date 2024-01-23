@@ -3,7 +3,6 @@ using Application.Models;
 using Application.Requests.Profile;
 using Application.Responses.Profile;
 using Application.Services.Auth.Interfaces;
-using Domain.Interfaces.Repositories;
 using FluentValidation;
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
