@@ -14,7 +14,6 @@ builder.Services.AddErrorHandling();
 
 builder.Services.AddConfiguredIdentity();
 builder.Services.AddInfrastructure(config); 
-builder.Services.AddRepositories();
 
 if (builder.Environment.IsDevelopment())
 {

@@ -2,13 +2,11 @@
 using Application.Models;
 using Application.Services.Edu.Interfaces;
 using Domain.Entities;
-using Domain.Interfaces.Repositories;
+using Infrastructure.Contexts;
 
 namespace Application.Services.Edu.Implementations;
 
-public class TestTaskService(
-    ITestTaskRepository testTaskRepository,
-    ITestTaskResultRepository testTaskResultRepository) : ITestTaskService
+public class TestTaskService(ApplicationDbContext context) : ITestTaskService
 {
     public async Task<TestTask> CreateTestTaskAsync(CreateTestTaskModel model,
         CancellationToken ct = default)
@@ -21,7 +19,7 @@ public class TestTaskService(
             CourseId = model.Course.Id,
             Title = model.TaskDto.Title
         };
-        await testTaskRepository.AddTestTaskToDatabaseAsync(task, ct);
+        await context.TestTasks.AddAsync(task, ct);
 
         var questions = model.TaskDto.Questions
             .Select(qDto =>
@@ -46,7 +44,7 @@ public class TestTaskService(
             })
             .ToList();
         task.Questions = questions;
-        await testTaskRepository.CommitChangesAsync(ct);
+        await context.SaveChangesAsync(ct);
         return task;
     }
 
@@ -55,16 +53,16 @@ public class TestTaskService(
         CancellationToken ct = default)
     {
         int correctAnswersCount = 0;
-        for (int i = 0; i < answeredQuestions.Length; i++)
+        foreach (var answeredQuestion in answeredQuestions)
         {
             var question = task.Questions!
-                .FirstOrDefault(q => q.Text == answeredQuestions[i].Question);
+                .FirstOrDefault(q => q.Text == answeredQuestion.Question);
             if (question is null) continue;
             
             var correctAnswer = question.AllVariants!.FirstOrDefault(av => av.IsCorrect);
             if (correctAnswer is null) continue;
             
-            if (answeredQuestions[i].Answer == correctAnswer.Text)
+            if (answeredQuestion.Answer == correctAnswer.Text)
             {
                 correctAnswersCount++;
             }
@@ -81,8 +79,8 @@ public class TestTaskService(
             TestTaskId = task.Id
         };
 
-        await testTaskResultRepository.SaveAsync(taskResult, ct);
-        await testTaskResultRepository.CommitChangesAsync(ct);
+        await context.Results.AddAsync(taskResult, ct);
+        await context.SaveChangesAsync(ct);
 
         return taskResult;
     }

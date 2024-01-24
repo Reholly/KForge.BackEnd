@@ -8,4 +8,5 @@ public interface IJwtTokenService
     string GenerateRefreshToken(Claim[] claims);
     Claim[] ParseClaims(string jwtToken);
     Task<bool> IsJwtTokenValidAsync(string jwtToken, bool validateLifeTime);
+    string GetUsernameFromAccessToken(string jwtToken);
 }
