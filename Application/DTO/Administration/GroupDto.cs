@@ -7,4 +7,4 @@ public record GroupDto(
     Guid GroupId,
     string Title,
     string Description, 
-    IEnumerable<ApplicationUserDto> Users);
+    ApplicationUserDto[] Users);

@@ -19,7 +19,9 @@ public class DepartmentToDtoMapper : IMapper<Department, DepartmentDto>
                         u.Name, 
                         u.Surname, 
                         u.Patronymic, 
-                        u.BirthDate)))));
+                        u.BirthDate))
+                    .ToArray()))
+            .ToArray());
     }
     
 }

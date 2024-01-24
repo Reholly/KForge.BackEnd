@@ -17,6 +17,6 @@ public class GroupToDtoMapper : IMapper<Group, GroupDto>
                 u.Name, 
                 u.Surname,
                 u.Patronymic,
-                u.BirthDate)));
+                u.BirthDate)).ToArray());
     }
 }

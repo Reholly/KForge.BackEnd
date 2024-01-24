@@ -14,6 +14,7 @@ public class AddUserToGroupHandler(ApplicationDbContext dbContext)
         var group = await _dbContext.Groups
             .FirstOrDefaultAsync(x => x.Id == request.UserWithGroupDto.Group, cancellationToken: ct);
         var user = await _dbContext.Profiles
+            .Include(x => x.Groups)
             .FirstOrDefaultAsync(x => x.Username == request.UserWithGroupDto.Username, cancellationToken: ct);
         
         if (group is null)
@@ -22,7 +23,6 @@ public class AddUserToGroupHandler(ApplicationDbContext dbContext)
             throw new NotFoundException("User not found.");
 
         user.Groups.Add(group);
-        group.Users.Add(user);
 
         await _dbContext.SaveChangesAsync(ct);
     }

@@ -25,15 +25,17 @@ public class UsersAdministrationController
         => handler.HandleAsync(request, ct);
 
 
-    [HttpPost]
-    public async Task BanUserAccount()
-    {
-        
-    }
-    
-    [HttpPost]
-    public async Task UnbanUserAccount()
-    {
-        
-    }
+    [HttpPost("/ban")]
+    public Task BanUserAccount(
+        [FromServices] BanUserHandler handler,
+        BanUserRequest request,
+        CancellationToken ct = default)
+        => handler.HandleAsync(request, ct);
+
+    [HttpPost("/unban")]
+    public Task UnbanUserAccount(
+        [FromServices] UnbanUserHandler handler,
+        [FromBody] UnbanUserRequest request,
+        CancellationToken ct = default)
+        => handler.HandleAsync(request, ct);
 }

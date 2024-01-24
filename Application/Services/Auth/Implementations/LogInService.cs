@@ -19,13 +19,19 @@ public class LogInService(
 
     public async Task<AuthTokensModel> LogInAsync(LogInDto dto)
     {
-        var result = await _signInManager.PasswordSignInAsync(dto.Username, dto.Password, false, false);
+        var result = await _signInManager.PasswordSignInAsync(dto.Username, dto.Password, false, true);
+
+        if (result.IsLockedOut)
+            throw new UnauthorizedException("You have been banned.");
         
         if (!result.Succeeded)
             throw new UnauthorizedException("Not allowed.");
 
         var user = await _userManager.FindByNameAsync(dto.Username);
-        
+        //
+        //await _roleManager.CreateAsync(new IdentityRole("Admin"));
+        //await _userManager.AddToRoleAsync(user!, "Admin");
+        //
         var roles = await  _userManager.GetRolesAsync(user!);
 
         var claims = new List<Claim>();

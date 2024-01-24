@@ -1,5 +1,6 @@
 using Application.Handlers.Administration.Groups;
 using Application.Requests.Administration.Groups;
+using Application.Responses.Administration.Groups;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,9 @@ namespace API.Controllers.Administration;
 public class GroupsController
 {
     [HttpGet]
-    public Task GetGroupWithUsers(
+    public Task<GetGroupWithUsersResponse> GetGroupWithUsers(
         [FromServices] GetGroupWithUsersHandler handler,
-        [FromBody] GetGroupWithUsersRequest request,
+        [FromQuery] GetGroupWithUsersRequest request,
         CancellationToken ct = default)
         => handler.HandleAsync(request, ct);
     

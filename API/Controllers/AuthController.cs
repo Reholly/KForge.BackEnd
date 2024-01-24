@@ -14,7 +14,7 @@ namespace API.Controllers;
 [ApiController]
 [Route("/api/auth")]
 public class AuthController : ControllerBase
-{
+{   
     [HttpPost("register")]
     public Task Register(
         [FromBody] RegisterRequest request,

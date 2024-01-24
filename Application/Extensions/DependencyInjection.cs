@@ -1,12 +1,17 @@
+using Application.DTO.Administration;
 using Application.DTO.Auth;
 using Application.DTO.Edu;
 using Application.DTO.Security;
 using Application.Handlers.Administration;
+using Application.Handlers.Administration.Departments;
+using Application.Handlers.Administration.Groups;
 using Application.Handlers.Administration.Roles;
+using Application.Handlers.Administration.Users;
 using Application.Handlers.Auth;
 using Application.Handlers.Edu.Tasks;
 using Application.Handlers.Profile;
 using Application.Mappers;
+using Application.Mappers.Administration;
 using Application.Mappers.Edu;
 using Application.Models;
 using Application.Options;
@@ -67,6 +72,22 @@ public static class DependencyInjection
         //Administration
         collection.AddScoped<AddMentorHandler>();
         collection.AddScoped<RemoveMentorHandler>();
+    
+        collection.AddScoped<CreateGroupHandler>();
+        collection.AddScoped<DeleteGroupHandler>();
+        collection.AddScoped<GetGroupWithUsersHandler>();
+        collection.AddScoped<UpdateGroupHandler>();
+        
+        collection.AddScoped<CreateDepartmentHandler>();
+        collection.AddScoped<DeleteDepartmentHandler>();
+        collection.AddScoped<GetAllDepartmentsHandler>();
+        collection.AddScoped<GetDepartmentByIdHandler>();
+        collection.AddScoped<UpdateDepartmentHandler>();
+
+        collection.AddScoped<AddUserToGroupHandler>();
+        collection.AddScoped<RemoveUserFromGroupHandler>();
+        collection.AddScoped<BanUserHandler>();
+        collection.AddScoped<UnbanUserHandler>();
     }
 
     public static void AddValidators(this IServiceCollection collection)
@@ -82,6 +103,8 @@ public static class DependencyInjection
     {
         collection.AddScoped<IMapper<TestTask, TestTaskDto>, TestTaskMapper>();
         collection.AddScoped<IMapper<TestTaskResult, TestTaskResultDto>, TestTaskResultMapper>();
+        collection.AddScoped<IMapper<Group, GroupDto>, GroupToDtoMapper>();
+        collection.AddScoped<IMapper<Department, DepartmentDto>, DepartmentToDtoMapper>();
     }
 
     public static void AddApplicationOptions(this IServiceCollection collection, IConfiguration configuration)

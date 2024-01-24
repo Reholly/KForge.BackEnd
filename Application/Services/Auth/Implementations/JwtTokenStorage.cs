@@ -34,4 +34,24 @@ public class JwtTokenStorage(
 
         username = value ?? throw new NotFoundException("Token not found.");
     }
+
+    public bool IsInBlackList(string username)
+    {
+        _memoryCache.TryGetValue(username, out bool isBanned);
+
+        return isBanned;
+    }
+
+    public void AddToBlackList(string username, int days)
+    {
+        _memoryCache.Set(username, 
+        true, 
+        new MemoryCacheEntryOptions()
+            .SetAbsoluteExpiration(TimeSpan.FromSeconds(days)));
+    }
+
+    public void RemoveFromBlackList(string username)
+    {
+        _memoryCache.Remove(username);
+    }
 }

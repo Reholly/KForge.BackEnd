@@ -4,4 +4,4 @@ public record DepartmentDto(
     Guid Id,
     string Title, 
     string Description, 
-    IEnumerable<GroupDto> Groups);
+    GroupDto[] Groups);

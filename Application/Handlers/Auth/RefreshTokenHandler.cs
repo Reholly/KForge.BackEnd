@@ -4,6 +4,8 @@ using Application.Models;
 using Application.Requests.Auth;
 using Application.Responses.Auth;
 using Application.Services.Auth.Interfaces;
+using Microsoft.AspNetCore.Identity;
+
 namespace Application.Handlers.Auth;
 
 public class RefreshTokenHandler(
@@ -20,6 +22,9 @@ public class RefreshTokenHandler(
         if (oldUsername is null)
             throw new UnauthorizedException("Refresh token is expired or invalid.");
 
+        if (_storage.IsInBlackList(oldUsername))
+            throw new UnauthorizedException("User banned.");
+        
         bool isValid = await _tokenService.IsJwtTokenValidAsync(request.RefreshTokenDto.ExpiredAccessToken, false);
         
         if (!isValid)
