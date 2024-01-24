@@ -8,6 +8,8 @@ public class Group : EntityBase
     public string Description { get; set; } = string.Empty;
     
     public Guid DepartmentId { get; set; }
+    public Department Department { get; set; }
     
     public ICollection<Course> Courses { get; set; } = new List<Course>();
+    public ICollection<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
 }

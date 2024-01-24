@@ -6,11 +6,17 @@ namespace Infrastructure.Contexts;
 
 public sealed class ApplicationDbContext : IdentityDbContext
 {
-    public DbSet<ApplicationUser> Profiles => Set<ApplicationUser>();
-    public DbSet<TestTask> TestTasks => Set<TestTask>();
+    public DbSet<Department> Departments => Set<Department>();
+    public DbSet<Group> Groups => Set<Group>();
     public DbSet<Course> Courses => Set<Course>();
+    
+    public DbSet<ApplicationUser> Profiles => Set<ApplicationUser>();
+    
+    public DbSet<TestTask> TestTasks => Set<TestTask>();
     public DbSet<TestTaskResult> Results => Set<TestTaskResult>();
+    
     public ApplicationDbContext() { }
+    
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {

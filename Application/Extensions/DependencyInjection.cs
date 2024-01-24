@@ -1,7 +1,8 @@
 using Application.DTO.Auth;
 using Application.DTO.Edu;
 using Application.DTO.Security;
-using Application.Handlers.Admin;
+using Application.Handlers.Administration;
+using Application.Handlers.Administration.Roles;
 using Application.Handlers.Auth;
 using Application.Handlers.Edu.Tasks;
 using Application.Handlers.Profile;
@@ -45,25 +46,27 @@ public static class DependencyInjection
 
     public static void AddHandlers(this IServiceCollection collection)
     {
+        //Auth
         collection.AddScoped<LogInHandler>();
         collection.AddScoped<RegisterHandler>();
         collection.AddScoped<RefreshTokenHandler>();
         collection.AddScoped<EmailConfirmHandler>();
         collection.AddScoped<ResetPasswordHandler>();
         
+        //Users
         collection.AddScoped<GetProfileHandler>();
         collection.AddScoped<UpdateProfileHandler>();
       
+        //Tasks
         collection.AddScoped<GetTaskByIdHandler>();
         collection.AddScoped<CreateTaskHandler>();
         collection.AddScoped<UpdateTaskHandler>();
         collection.AddScoped<DeleteTaskHandler>();
         collection.AddScoped<PassTestTaskHandler>();
 
+        //Administration
         collection.AddScoped<AddMentorHandler>();
         collection.AddScoped<RemoveMentorHandler>();
-        collection.AddScoped<CreateRoleHandler>();
-        collection.AddScoped<DeleteRoleHandler>();
     }
 
     public static void AddValidators(this IServiceCollection collection)

@@ -13,7 +13,7 @@ public class TestTaskResultMapper : IMapper<TestTaskResult, TestTaskResultDto>
             TotalQuestionsCount = from.TotalQuestionsCount
         };
 
-    public TestTaskResult MapReverse(TestTaskResult dest, TestTaskResultDto src)
+    public TestTaskResult MapReverse(TestTaskResultDto from)
     {
         return null!;
     }

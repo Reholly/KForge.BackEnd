@@ -1,7 +1,7 @@
 ﻿namespace Application.Mappers;
 
-public interface IMapper<TFromType, TOType>
+public interface IMapper<in TSource, out TDestination>
 {
-    TOType Map(TFromType from);
-    TFromType MapReverse(TFromType dest, TOType src);
+    TDestination Map(TSource from);
+    //TSource MapReverse(TDestination from);
 }

@@ -28,8 +28,10 @@ public class UpdateTaskHandler(
             throw new PermissionDeniedException("Only course mentors " +
                                                 "and admins can update tasks");
         }
-
-        testTask = testTaskMapper.MapReverse(testTask, request.TaskDto);
+        
+        //переделка маппинга на тебе, Стёпа.
+        //testTask = testTaskMapper.MapReverse(request.TaskDto);
+        //
         
         await Task.Run(() => context.TestTasks.Update(testTask), ct);
         await context.SaveChangesAsync(ct);

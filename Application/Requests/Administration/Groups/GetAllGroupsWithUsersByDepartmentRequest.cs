@@ -1,0 +1,3 @@
+namespace Application.Requests.Administration.Groups;
+
+public record GetAllGroupsWithUsersByDepartmentRequest(Guid DepartmentId);

@@ -9,6 +9,7 @@ public class Course : EntityBase
     public int AcademicHoursDuration { get; set; }
     
     public Guid GroupId { get; set; }
+    public Group Group { get; set; }
     
     public ICollection<ApplicationUser> Students { get; set; } = new List<ApplicationUser>();
     public ICollection<ApplicationUser> Mentors { get; set; } = new List<ApplicationUser>();

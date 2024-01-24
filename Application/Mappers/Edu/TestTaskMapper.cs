@@ -21,9 +21,13 @@ public class TestTaskMapper : IMapper<TestTask, TestTaskDto>
                 }).ToArray()
         };
 
-    public TestTask MapReverse(TestTask dest, TestTaskDto src)
+    public TestTask MapReverse(TestTaskDto src)
     {
-        dest.Title = src.Title;
+        var dest = new TestTask
+        {
+            Title = src.Title,
+            AuthorId = default
+        };
         dest.Questions = src.Questions.Select(qDto =>
             {
                 var question = new Question

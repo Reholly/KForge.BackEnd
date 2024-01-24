@@ -11,6 +11,8 @@ public class ApplicationUser : EntityBase
     public string Patronymic { get; set; } = string.Empty;
     public string Username { get; set; } = string.Empty;
     
+    public ICollection<Group> Groups { get; set; }
+    
     public DateTime BirthDate { get; set; }
     
     public ICollection<Course> CoursesAsStudent { get; set; } = new List<Course>();
