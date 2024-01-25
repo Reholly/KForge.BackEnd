@@ -8,8 +8,8 @@ namespace API.Controllers.Administration;
 
 [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
 [ApiController]
-[Route("/api/admin/groups")]
-public class GroupsController
+[Route("/api/admin/group")]
+public class GroupController
 {
     [HttpGet]
     public Task<GetGroupWithUsersResponse> GetGroupWithUsers(

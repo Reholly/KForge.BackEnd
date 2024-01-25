@@ -10,6 +10,7 @@ public class AddMentorHandler(IRoleService roleService)
 
     public async Task HandleAsync(AddMentorRequest request, CancellationToken ct = default)
     {
-        await _roleService.AttachRoleAsync(request.UsernameDto.Username, _mentorRole);
+        await _roleService.AttachRoleAsync(request.Username, _mentorRole);
+        //прикрепить к курсу
     }
 }

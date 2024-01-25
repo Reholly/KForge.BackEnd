@@ -1,7 +1,5 @@
-using System.Net.Mime;
 using API.Extensions;
 using Application.DTO.Auth;
-using Application.Exceptions.Common;
 using Application.Handlers.Auth;
 using Application.Requests.Auth;
 using Application.Responses.Auth;

@@ -8,8 +8,8 @@ namespace API.Controllers.Administration;
 
 [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
 [ApiController]
-[Route("/api/admin/departments")]
-public class DepartmentsController
+[Route("/api/admin/department")]
+public class DepartmentController
 {
     [HttpGet]
     public Task<GetAllDepartmentsResponse> GetAllDepartments(

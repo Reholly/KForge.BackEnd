@@ -7,8 +7,8 @@ namespace API.Controllers.Administration;
 
 [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
 [ApiController]
-[Route("/api/admin/users")]
-public class UsersAdministrationController
+[Route("/api/admin/user")]
+public class UserManagementController
 {
     [HttpPost("/groups/add")]
     public Task AddUserToGroup(

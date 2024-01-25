@@ -5,11 +5,11 @@ using Application.Responses.Profile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers;
+namespace API.Controllers.User;
 
 [Authorize(AuthenticationSchemes = "Bearer")]
 [ApiController]
-[Route("/api/profile")]
+[Route("/api/user/profile")]
 public class UserProfileController : ControllerBase
 {
     [HttpGet]

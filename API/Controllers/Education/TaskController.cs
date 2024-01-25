@@ -5,12 +5,12 @@ using Application.Responses.Education.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers;
+namespace API.Controllers.Education;
 
 [ApiController]
 [Authorize(AuthenticationSchemes = "Bearer")]
-[Route("/api/edu/[controller]")]
-public class TasksController : ControllerBase
+[Route("/api/edu/task")]
+public class TaskController : ControllerBase
 {
     [HttpGet("{taskId}")]
     public Task<GetTaskByIdResponse> GetTaskById(

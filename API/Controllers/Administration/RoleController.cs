@@ -7,8 +7,8 @@ namespace API.Controllers.Administration;
 
 [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
 [ApiController]
-[Route("/api/admin/roles")]
-public class RolesController : ControllerBase
+[Route("/api/admin/role")]
+public class RoleController : ControllerBase
 {
     [HttpPost("/add/mentor")]
     public Task AddMentor( 
