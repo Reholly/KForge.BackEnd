@@ -27,5 +27,13 @@ public class CourseEntityConfiguration : IEntityTypeConfiguration<Course>
         builder.HasOne(x => x.Group)
             .WithMany(x => x.Courses)
             .HasForeignKey(x => x.GroupId);
+
+        builder.HasMany(x => x.Lectures)
+            .WithOne(x => x.Course)
+            .HasForeignKey(x => x.CourseId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(x => x.Tags)
+            .WithMany(x => x.Courses);
     }
 }

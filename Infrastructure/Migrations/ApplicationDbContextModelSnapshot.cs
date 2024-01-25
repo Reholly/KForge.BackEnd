@@ -67,6 +67,21 @@ namespace Infrastructure.Migrations
                     b.ToTable("ApplicationUserGroup");
                 });
 
+            modelBuilder.Entity("CourseTag", b =>
+                {
+                    b.Property<Guid>("CoursesId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TagsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CoursesId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("CourseTag");
+                });
+
             modelBuilder.Entity("Domain.Entities.AnswerVariant", b =>
                 {
                     b.Property<Guid>("Id")
@@ -267,6 +282,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("LastlyEditedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("OrdinalInSection")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("SectionId")
                         .HasColumnType("uuid");
 
@@ -279,6 +297,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("CourseId");
 
                     b.HasIndex("SectionId");
 
@@ -332,11 +354,42 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("LastlyEditedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("OrdinalInCourse")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Section");
+                    b.ToTable("Section", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("LastlyEditedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tag", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TestTask", b =>
@@ -360,6 +413,12 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("LastlyEditedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("OrdinalInSection")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("SectionId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
@@ -369,6 +428,8 @@ namespace Infrastructure.Migrations
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("CourseId");
+
+                    b.HasIndex("SectionId");
 
                     b.ToTable("TestTask", (string)null);
                 });
@@ -653,6 +714,21 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CourseTag", b =>
+                {
+                    b.HasOne("Domain.Entities.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CoursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.AnswerVariant", b =>
                 {
                     b.HasOne("Domain.Entities.Question", "Question")
@@ -688,11 +764,29 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Lecture", b =>
                 {
-                    b.HasOne("Domain.Entities.Section", null)
+                    b.HasOne("Domain.Entities.ApplicationUser", "Author")
+                        .WithMany("LecturesAsAuthor")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Course", "Course")
+                        .WithMany("Lectures")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Section", "Section")
                         .WithMany("Lectures")
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
@@ -708,11 +802,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Section", b =>
                 {
-                    b.HasOne("Domain.Entities.Course", null)
+                    b.HasOne("Domain.Entities.Course", "Course")
                         .WithMany("Sections")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("Domain.Entities.TestTask", b =>
@@ -729,9 +825,17 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Section", "Section")
+                        .WithMany("Tasks")
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Author");
 
                     b.Navigation("Course");
+
+                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("Domain.Entities.TestTaskResult", b =>
@@ -806,6 +910,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
                 {
+                    b.Navigation("LecturesAsAuthor");
+
                     b.Navigation("TasksAsAuthor");
 
                     b.Navigation("TestTaskResults");
@@ -813,6 +919,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Course", b =>
                 {
+                    b.Navigation("Lectures");
+
                     b.Navigation("Sections");
 
                     b.Navigation("TestTasks");
@@ -836,6 +944,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Section", b =>
                 {
                     b.Navigation("Lectures");
+
+                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("Domain.Entities.TestTask", b =>

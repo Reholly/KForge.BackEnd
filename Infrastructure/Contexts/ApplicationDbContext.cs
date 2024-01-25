@@ -8,12 +8,16 @@ public sealed class ApplicationDbContext : IdentityDbContext
 {
     public DbSet<Department> Departments => Set<Department>();
     public DbSet<Group> Groups => Set<Group>();
-    public DbSet<Course> Courses => Set<Course>();
     
-    public DbSet<ApplicationUser> Profiles => Set<ApplicationUser>();
+    public DbSet<Course> Courses => Set<Course>();
+    public DbSet<Section> Sections => Set<Section>();
+    public DbSet<Tag> Tags => Set<Tag>();
     
     public DbSet<TestTask> TestTasks => Set<TestTask>();
     public DbSet<TestTaskResult> Results => Set<TestTaskResult>();
+    public DbSet<Lecture> Lectures => Set<Lecture>();
+    
+    public DbSet<ApplicationUser> Profiles => Set<ApplicationUser>();
     
     public ApplicationDbContext() { }
     

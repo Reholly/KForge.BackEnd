@@ -29,5 +29,9 @@ public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<Appli
 
         builder.HasMany(x => x.Groups)
             .WithMany(x => x.Users);
+
+        builder.HasMany(x => x.LecturesAsAuthor)
+            .WithOne(x => x.Author)
+            .HasForeignKey(x => x.AuthorId);
     }
 }

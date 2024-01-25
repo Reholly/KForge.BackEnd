@@ -29,5 +29,9 @@ public class TestTaskEntityConfiguration : IEntityTypeConfiguration<TestTask>
             .WithOne(ttr => ttr.TestTask)
             .HasForeignKey(ttr => ttr.TestTaskId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(x => x.Section)
+            .WithMany(x => x.Tasks)
+            .HasForeignKey(x => x.SectionId);
     }
 }

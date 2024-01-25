@@ -5,5 +5,4 @@ namespace Application.Requests.Administration.Users;
 public record BanUserRequest(
     string Username, 
     string Reason, 
-    int Days, 
-    bool IsPermanent);
+    int Days);

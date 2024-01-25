@@ -17,7 +17,9 @@ public class ApplicationUser : EntityBase
     
     public ICollection<Course> CoursesAsStudent { get; set; } = new List<Course>();
     public ICollection<Course> CoursesAsMentor { get; set; } = new List<Course>();
-    
-    public ICollection<TestTaskResult>? TestTaskResults { get; set; }
-    public ICollection<TestTask>? TasksAsAuthor { get; set; }
+
+    public ICollection<TestTaskResult> TestTaskResults { get; set; } = new List<TestTaskResult>();
+
+    public ICollection<TestTask> TasksAsAuthor { get; set; } = new List<TestTask>();
+    public ICollection<Lecture> LecturesAsAuthor { get; set; } = new List<Lecture>();
 }
